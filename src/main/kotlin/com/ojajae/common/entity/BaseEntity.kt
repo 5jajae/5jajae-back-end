@@ -20,3 +20,34 @@ open class BaseEntity {
     @LastModifiedDate
     private var updatedAt: LocalDateTime? = null
 }
+
+/**
+ * createdAt, updatedAt, deletedAt이 있는 클래스로 구분
+ * updated => created 상속
+ * deleted => updated 상속
+ */
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener::class)
+open class ImmutableEntity<T>(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    open var id: T? = null,
+
+    @CreatedDate
+    @Column(updatable = false)
+    open val createdAt: LocalDateTime = LocalDateTime.now(),
+)
+
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener::class)
+open class MutableEntity<T>(
+    @LastModifiedDate
+    @Column(nullable = false)
+    open var updatedAt: LocalDateTime = LocalDateTime.now(),
+) : ImmutableEntity<T>()
+
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener::class)
+open class DeletableEntity<T>(
+    open var deletedAt: LocalDateTime? = null
+) : ImmutableEntity<T>()

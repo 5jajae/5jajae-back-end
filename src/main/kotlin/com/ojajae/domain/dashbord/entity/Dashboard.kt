@@ -8,11 +8,11 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "tb_dashboard")
+//@Table(name = "dashboard")
 class Dashboard(
     @Enumerated(EnumType.STRING)
     @Column(name = "dashboard_type")
-    var type: DashboardType,
+    var dashboardType: DashboardType,
 
     @Column(name = "store_id")
     var storeId: Long?,
