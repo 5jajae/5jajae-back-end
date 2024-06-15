@@ -7,7 +7,7 @@ import jakarta.persistence.Entity
 class Store(
     var name: String,
 
-    var description: String,
+    var descriptions: String?,
 
     var address: String,
 
