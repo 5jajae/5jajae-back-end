@@ -4,7 +4,7 @@ import com.ojajae.common.entity.ImmutableEntity
 import jakarta.persistence.Entity
 
 @Entity
-class StoreFiles(
+class StoreFile(
     var storeId: Long,
 
     var fileUrl: String,

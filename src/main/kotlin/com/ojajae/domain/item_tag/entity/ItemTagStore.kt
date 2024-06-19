@@ -1,11 +1,11 @@
-package com.ojajae.domain.item.entity
+package com.ojajae.domain.item_tag.entity
 
 import com.ojajae.common.entity.ImmutableEntity
 import jakarta.persistence.Entity
 
 @Entity
-class ItemStore(
-    var storeId: Long,
+class ItemTagStore(
+    var itemTagId: Long,
 
-    var itemId: Long,
+    var storeId: Long,
 ) : ImmutableEntity<Long>()
