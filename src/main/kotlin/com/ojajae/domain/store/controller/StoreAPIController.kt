@@ -4,6 +4,7 @@ import com.ojajae.common.API_PREFIX
 import com.ojajae.common.controller.BaseAPIController
 import com.ojajae.common.web.ResultDTO
 import com.ojajae.domain.store.form.response.StoreDetailResponseForm
+import com.ojajae.domain.store.form.response.StoreListResponseForm
 import com.ojajae.domain.store.service.StoreService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,13 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("$API_PREFIX/store")
+@RequestMapping("$API_PREFIX/stores")
 class StoreAPIController(
-    val storeService: StoreService
+    private val storeService: StoreService
 ): BaseAPIController() {
     @GetMapping
-    fun test(): ResponseEntity<Nothing> {
-        return okResponse()
+    fun getStoreList(): ResponseEntity<ResultDTO<StoreListResponseForm>> {
+        return ResponseEntity.ok(ResultDTO.createSuccess(
+            message = "",
+            data = storeService.getStoreList(),
+        ))
     }
 
     @GetMapping("/{storeId}")

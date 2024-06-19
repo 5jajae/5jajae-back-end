@@ -27,7 +27,7 @@ class DashboardRepositoryImpl: QuerydslRepositorySupport(Dashboard::class.java),
             .fetchOne()
     }
 
-    private fun eqStoreId(storeId: Long?): BooleanExpression? {
+    private fun eqStoreId(storeId: Int?): BooleanExpression? {
         return storeId?.let {
             dashboard.storeId.eq(it)
         }

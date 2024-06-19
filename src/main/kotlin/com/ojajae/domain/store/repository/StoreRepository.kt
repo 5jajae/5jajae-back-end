@@ -8,11 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository
 
-interface StoreRepository: JpaRepository<Store, Int> {
+interface StoreRepository: JpaRepository<Store, Int>, StoreCustomRepository {
 
 }
 
-@Repository
 interface StoreCustomRepository {
     fun getStore(form: StoreRequestForm): Store?
 }

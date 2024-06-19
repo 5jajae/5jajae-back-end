@@ -17,7 +17,7 @@ class DashboardController(
     private val dashboardService: DashboardService
 ) {
     @GetMapping("/store/{store}")
-    fun getDashboardByStore(@PathVariable store: Long): ResponseEntity<ResultDTO<DashboardResponseForm>> {
+    fun getDashboardByStore(@PathVariable store: Int): ResponseEntity<ResultDTO<DashboardResponseForm>> {
         val dashboard = dashboardService.getDashboard(DashboardRequestForm(DashboardType.STORE_COUNT, store))
         return ResponseEntity.ok(ResultDTO.createSuccess("", DashboardResponseForm.of(dashboard)))
     }

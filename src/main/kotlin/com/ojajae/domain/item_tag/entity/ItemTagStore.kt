@@ -5,7 +5,7 @@ import jakarta.persistence.Entity
 
 @Entity
 class ItemTagStore(
-    var itemTagId: Long,
+    var itemTagId: Int,
 
-    var storeId: Long,
+    var storeId: Int,
 ) : ImmutableEntity<Int>()

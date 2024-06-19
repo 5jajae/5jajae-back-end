@@ -13,7 +13,7 @@ class Dashboard(
     var dashboardType: DashboardType,
 
     @Column(name = "store_id")
-    var storeId: Long?,
+    var storeId: Int?,
 
     @Column(name = "ip_address")
     var ipAddress: String?,

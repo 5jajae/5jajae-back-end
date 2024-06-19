@@ -5,7 +5,7 @@ import jakarta.persistence.Entity
 
 @Entity
 class StoreFile(
-    var storeId: Long,
+    var storeId: Int,
 
     var fileUrl: String,
 
