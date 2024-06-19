@@ -3,6 +3,7 @@ package com.ojajae.domain.store.controller
 import com.ojajae.common.API_PREFIX
 import com.ojajae.common.controller.BaseAPIController
 import com.ojajae.common.web.ResultDTO
+import com.ojajae.domain.store.form.response.StoreDetailResponseForm
 import com.ojajae.domain.store.service.StoreService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,7 +22,7 @@ class StoreAPIController(
     }
 
     @GetMapping("/{storeId}")
-    fun getStore(@PathVariable storeId: Long): ResponseEntity<ResultDTO> {
+    fun getStore(@PathVariable storeId: Int): ResponseEntity<ResultDTO<StoreDetailResponseForm>> {
         return ResponseEntity.ok(storeService.getStore(storeId))
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository
 
-interface StoreRepository: JpaRepository<Store, Long> {
+interface StoreRepository: JpaRepository<Store, Int> {
 
 }
 
@@ -26,7 +26,7 @@ class StoreRepositoryImpl: QuerydslRepositorySupport(Store::class.java), StoreCu
             .fetchOne()
     }
 
-    private fun eqStoreId(storeId: Long?): BooleanExpression? {
+    private fun eqStoreId(storeId: Int?): BooleanExpression? {
         return storeId?.let {
             store.id.eq(it)
         }

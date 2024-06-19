@@ -3,7 +3,7 @@ package com.ojajae.domain.store.form.response
 import com.ojajae.domain.store.entity.Store
 
 data class StoreDetailResponseForm(
-    val storeId: Long,
+    val storeId: Int,
 
     val name: String,
 

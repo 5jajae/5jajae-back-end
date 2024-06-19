@@ -10,17 +10,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 class CommonExceptionHandler: ResponseEntityExceptionHandler() {
 
-    @ExceptionHandler(CustomException::class)
-    fun handleException(ex: CustomException): ResponseEntity<ResultDTO> {
-        ex.printStackTrace()
-        val result: ResultDTO = ResultDTO.createError(ex.message?: "알 수 없는 에러가 발생하였습니다.")
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result)
-    }
-
-    @ExceptionHandler(Exception::class)
-    fun handleException(ex: Exception): ResponseEntity<ResultDTO> {
-        ex.printStackTrace()
-        val result: ResultDTO = ResultDTO.createError("알 수 없는 에러가 발생하였습니다.")
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result)
-    }
+//    @ExceptionHandler(CustomException::class)
+//    fun handleException(ex: CustomException): ResponseEntity<ResultDTO<Any>> {
+//        ex.printStackTrace()
+//        val result = ResultDTO.createError(ex.message?: "알 수 없는 에러가 발생하였습니다.")
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result)
+//    }
+//
+//    @ExceptionHandler(Exception::class)
+//    fun handleException(ex: Exception): ResponseEntity<ResultDTO<Any>> {
+//        ex.printStackTrace()
+//        val result = ResultDTO.createError("알 수 없는 에러가 발생하였습니다.")
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result)
+//    }
 }

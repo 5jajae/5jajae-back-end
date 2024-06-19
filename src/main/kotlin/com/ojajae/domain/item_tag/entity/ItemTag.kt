@@ -8,4 +8,4 @@ class ItemTag(
     var name: String,
 
     var imageUrl: String,
-): MutableEntity<Long>()
+): MutableEntity<Int>()

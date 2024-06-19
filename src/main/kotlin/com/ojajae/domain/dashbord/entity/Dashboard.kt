@@ -1,6 +1,6 @@
 package com.ojajae.domain.dashbord.entity
 
-import com.ojajae.common.entity.BaseEntity
+import com.ojajae.common.entity.MutableEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -19,7 +19,7 @@ class Dashboard(
     var ipAddress: String?,
 
     var count: Long = 0
-): BaseEntity()
+): MutableEntity<Int>()
 
 enum class DashboardType {
     STORE_COUNT

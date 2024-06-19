@@ -10,4 +10,4 @@ class StoreFile(
     var fileUrl: String,
 
     var order: Int = 0,
-) : ImmutableEntity<Long>()
+) : ImmutableEntity<Int>()

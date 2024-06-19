@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository
 
-interface DashboardRepository: JpaRepository<Dashboard, Long> {
+interface DashboardRepository: JpaRepository<Dashboard, Int> {
 }
 
 @Repository

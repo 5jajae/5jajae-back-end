@@ -8,4 +8,4 @@ class ItemTagStore(
     var itemTagId: Long,
 
     var storeId: Long,
-) : ImmutableEntity<Long>()
+) : ImmutableEntity<Int>()

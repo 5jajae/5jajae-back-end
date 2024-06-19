@@ -12,12 +12,10 @@ import org.springframework.stereotype.Service
 class StoreService(
     val storeRepository: StoreCustomRepository
 ) {
-    fun getStore(storeId: Long): ResultDTO {
-        val store: Store = storeRepository.getStore(StoreRequestForm(storeId = storeId)) ?: throw CustomException("업체를 찾을 수 없습니다.")
+    fun getStore(storeId: Int): ResultDTO<StoreDetailResponseForm> {
+        val store: Store = storeRepository.getStore(StoreRequestForm(storeId = storeId))
+                ?: throw CustomException("업체를 찾을 수 없습니다.")
 
-        val resultDTO: ResultDTO = ResultDTO.createSuccess("")
-        resultDTO.put("storeDetail", StoreDetailResponseForm.of(store))
-
-        return resultDTO
+        return ResultDTO.createSuccess("", StoreDetailResponseForm.of(store))
     }
 }

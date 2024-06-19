@@ -26,4 +26,4 @@ class Store(
     var identificationNumber: String?,
 
     var items: String?,
-): MutableEntity<Long>()
+): MutableEntity<Int>()
