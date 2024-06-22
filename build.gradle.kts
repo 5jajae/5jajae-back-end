@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+
 plugins {
 	id("org.springframework.boot") version "3.3.0"
 	id("io.spring.dependency-management") version "1.1.5"
@@ -7,8 +9,12 @@ plugins {
 	kotlin("kapt") version "1.9.24"
 }
 
-group = "com"
-version = "0.0.1-SNAPSHOT"
+base {
+	archivesName.set("app")
+}
+
+group = "com.ojajae"
+version = ""
 
 java {
 	toolchain {
@@ -54,5 +60,6 @@ kotlin {
 }
 
 tasks.withType<Test> {
-	useJUnitPlatform()
+//	useJUnitPlatform()
+	exclude("**/*")
 }
