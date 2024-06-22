@@ -41,6 +41,10 @@ dependencies {
 
 	// swagger 설정
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
+
+	// aws
+	implementation("io.awspring.cloud:spring-cloud-starter-aws:2.4.4")
+
 }
 
 kotlin {
