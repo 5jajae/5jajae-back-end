@@ -19,9 +19,9 @@ class S3Service(
 
     private val EXPIRE_SECOND = (1000 * 60 * 2).toLong()
 
-    fun getPresignedUrl(fileName: String): URL {
+    fun getPresignedUrl(fileName: String): String {
         val generatePresignedUrlRequest: GeneratePresignedUrlRequest? = getGeneratePresignedUrlRequest(bucket, fileName)
-        return amazonS3.generatePresignedUrl(generatePresignedUrlRequest)
+        return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString()
     }
 
     private fun getGeneratePresignedUrlRequest(bucket: String, fileName: String): GeneratePresignedUrlRequest? {

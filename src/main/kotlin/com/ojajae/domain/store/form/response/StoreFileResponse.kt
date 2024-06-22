@@ -8,11 +8,14 @@ data class StoreFileResponse(
     var imageUrl: String,
 ) {
     companion object {
-        fun of(storeFile: StoreFile): StoreFileResponse {
+        fun of(
+            storeFile: StoreFile,
+            imageUrl: String,
+        ): StoreFileResponse {
             return StoreFileResponse(
                 id = storeFile.id!!,
                 storeId = storeFile.storeId,
-                imageUrl = storeFile.fileUrl,
+                imageUrl = imageUrl,
             )
         }
     }

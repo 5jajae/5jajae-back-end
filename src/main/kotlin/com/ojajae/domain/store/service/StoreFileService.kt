@@ -14,9 +14,10 @@ class StoreFileService(
     @Transactional(readOnly = true)
     fun findFirstImageByStoreIdIn(storeIds: List<Int>): List<StoreFileResponse> {
         return storeFileRepository.findFirstImageByStoreIdIn(storeIds).map {
-            val storeFileResponse = StoreFileResponse.of(it)
-            storeFileResponse.imageUrl = s3Service.getPresignedUrl(storeFileResponse.imageUrl).toString()
-            storeFileResponse
+            StoreFileResponse.of(
+                storeFile = it,
+                imageUrl = s3Service.getPresignedUrl(it.fileUrl),
+            )
         }
     }
 }

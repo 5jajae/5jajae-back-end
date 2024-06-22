@@ -1,10 +1,11 @@
 package com.ojajae.domain.store.service
 
 import com.ojajae.common.DEFAULT_IMAGE_PATH
-import com.ojajae.common.exception.CustomException
+import com.ojajae.common.exception.NotFoundException
 import com.ojajae.common.web.ResultDTO
 import com.ojajae.domain.item_tag.service.ItemTagStoreService
 import com.ojajae.domain.store.entity.Store
+import com.ojajae.domain.store.exception.StoreException
 import com.ojajae.domain.store.form.request.StoreRequestForm
 import com.ojajae.domain.store.form.response.StoreDetailResponseForm
 import com.ojajae.domain.store.form.response.StoreListResponse
@@ -41,7 +42,7 @@ class StoreService(
     @Transactional(readOnly = true)
     fun getStore(storeId: Int): ResultDTO<StoreDetailResponseForm> {
         val store: Store = storeRepository.getStore(StoreRequestForm(storeId = storeId))
-            ?: throw CustomException("업체를 찾을 수 없습니다.")
+            ?: throw NotFoundException(StoreException.NotFoundStore)
 
         return ResultDTO.createSuccess("", StoreDetailResponseForm.of(store))
     }

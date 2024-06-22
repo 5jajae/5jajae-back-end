@@ -8,11 +8,14 @@ data class ItemTagResponseForm(
     val imageUrl: String,
 ) {
     companion object {
-        fun of(itemTag: ItemTag): ItemTagResponseForm {
+        fun of(
+            itemTag: ItemTag,
+            imageUrl: String,
+        ): ItemTagResponseForm {
             return ItemTagResponseForm(
                 id = itemTag.id!!,
                 name = itemTag.name,
-                imageUrl = itemTag.name,
+                imageUrl = imageUrl,
             )
         }
     }
