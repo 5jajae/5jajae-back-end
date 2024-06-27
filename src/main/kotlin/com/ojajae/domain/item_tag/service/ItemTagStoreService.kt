@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service
 class ItemTagStoreService(
     private val itemTagStoreRepository: ItemTagStoreRepository,
 ) {
+    fun findByStoreId(storeId: Int): List<ItemTagStoreResponseForm> {
+        return findByStoreIdIn(listOf(storeId))
+    }
+
     fun findByStoreIdIn(storeIds: List<Int>): List<ItemTagStoreResponseForm> {
         return itemTagStoreRepository.findByStoreIdIn(storeIds = storeIds).map { ItemTagStoreResponseForm.of(it) }
     }

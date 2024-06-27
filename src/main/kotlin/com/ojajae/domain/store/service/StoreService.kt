@@ -40,10 +40,16 @@ class StoreService(
     }
 
     @Transactional(readOnly = true)
-    fun getStore(storeId: Int): ResultDTO<StoreDetailResponseForm> {
+    fun getStore(storeId: Int): StoreDetailResponseForm {
         val store: Store = storeRepository.getStore(StoreRequestForm(storeId = storeId))
             ?: throw NotFoundException(StoreException.NotFoundStore)
+        val storeFiles = storeFileService.findImagesByStoreId(store.id!!)
+        val tags = itemTagStoreService.findByStoreId(store.id!!)
 
-        return ResultDTO.createSuccess("", StoreDetailResponseForm.of(store))
+        return StoreDetailResponseForm.of(
+            store = store,
+            itemTags = tags,
+            storeFiles = storeFiles,
+        )
     }
 }

@@ -1,5 +1,7 @@
 package com.ojajae.domain.store.form.response
 
+import com.ojajae.common.DEFAULT_IMAGE_PATH
+import com.ojajae.domain.item_tag.form.ItemTagStoreResponseForm
 import com.ojajae.domain.store.entity.Store
 
 data class StoreDetailResponseForm(
@@ -25,23 +27,30 @@ data class StoreDetailResponseForm(
 
     val identificationNumber: String?,
 
-    val items: String?,
+    val storeFiles: List<StoreFileResponse> = emptyList(),
+
+    val itemTags: List<ItemTagStoreResponseForm>? = emptyList(),
 ) {
     companion object {
-        fun of(item: Store): StoreDetailResponseForm {
+        fun of(
+            store: Store,
+            storeFiles: List<StoreFileResponse> = emptyList(),
+            itemTags: List<ItemTagStoreResponseForm> = emptyList(),
+        ): StoreDetailResponseForm {
             return StoreDetailResponseForm(
-                storeId = item.id!!,
-                name = item.name,
-                descriptions = item.descriptions,
-                address = item.address,
-                lat = item.lat,
-                lng = item.lng,
-                contactNumber = item.contactNumber,
-                homepage = item.homepage,
-                openingHours = item.openingHours,
-                representativeName = item.representativeName,
-                identificationNumber = item.identificationNumber,
-                items = item.items,
+                storeId = store.id!!,
+                name = store.name,
+                descriptions = store.descriptions,
+                address = store.address,
+                lat = store.lat,
+                lng = store.lng,
+                contactNumber = store.contactNumber,
+                homepage = store.homepage,
+                openingHours = store.openingHours,
+                representativeName = store.representativeName,
+                identificationNumber = store.identificationNumber,
+                itemTags = itemTags,
+                storeFiles = storeFiles,
             )
         }
     }

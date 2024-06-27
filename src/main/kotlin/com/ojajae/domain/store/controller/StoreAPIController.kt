@@ -27,6 +27,9 @@ class StoreAPIController(
 
     @GetMapping("/{storeId}")
     fun getStore(@PathVariable storeId: Int): ResponseEntity<ResultDTO<StoreDetailResponseForm>> {
-        return ResponseEntity.ok(storeService.getStore(storeId))
+        return ResponseEntity.ok(ResultDTO.createSuccess(
+            message = "",
+            data = storeService.getStore(storeId))
+        )
     }
 }
