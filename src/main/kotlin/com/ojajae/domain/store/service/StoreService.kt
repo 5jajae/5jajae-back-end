@@ -2,7 +2,6 @@ package com.ojajae.domain.store.service
 
 import com.ojajae.common.DEFAULT_IMAGE_PATH
 import com.ojajae.common.exception.NotFoundException
-import com.ojajae.common.web.ResultDTO
 import com.ojajae.domain.item_tag.service.ItemTagStoreService
 import com.ojajae.domain.store.entity.Store
 import com.ojajae.domain.store.exception.StoreException
@@ -29,7 +28,7 @@ class StoreService(
         val tags = itemTagStoreService.findByStoreIdIn(storeIds = storeIds).groupBy { it.storeId }
 
         return StoreListResponseForm(
-            storeList = stores.map {
+            stores = stores.map {
                 StoreListResponse.of(
                     store = it,
                     thumbnailImage = storeFiles[it.id!!]?.imageUrl ?: DEFAULT_IMAGE_PATH,

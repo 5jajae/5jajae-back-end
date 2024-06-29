@@ -5,7 +5,7 @@ import com.ojajae.domain.item_tag.form.ItemTagStoreResponseForm
 import com.ojajae.domain.store.entity.Store
 
 data class StoreListResponseForm(
-    val storeList: List<StoreListResponse> = emptyList(),
+    val stores: List<StoreListResponse> = emptyList(),
 )
 
 data class StoreListResponse(
