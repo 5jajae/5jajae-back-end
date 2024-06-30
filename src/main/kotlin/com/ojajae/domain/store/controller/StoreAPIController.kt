@@ -3,11 +3,13 @@ package com.ojajae.domain.store.controller
 import com.ojajae.common.API_PREFIX
 import com.ojajae.common.controller.BaseAPIController
 import com.ojajae.common.web.ResultDTO
+import com.ojajae.domain.store.form.request.StoreListRequestForm
 import com.ojajae.domain.store.form.response.StoreDetailResponseForm
 import com.ojajae.domain.store.form.response.StoreListResponseForm
 import com.ojajae.domain.store.service.StoreService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -18,10 +20,14 @@ class StoreAPIController(
     private val storeService: StoreService
 ): BaseAPIController() {
     @GetMapping
-    fun getStoreList(): ResponseEntity<ResultDTO<StoreListResponseForm>> {
+    fun getStoreList(
+        @ModelAttribute request: StoreListRequestForm,
+    ): ResponseEntity<ResultDTO<StoreListResponseForm>> {
         return ResponseEntity.ok(ResultDTO.createSuccess(
             message = "",
-            data = storeService.getStoreList(),
+            data = storeService.getStoreList(
+                request = request,
+            ),
         ))
     }
 

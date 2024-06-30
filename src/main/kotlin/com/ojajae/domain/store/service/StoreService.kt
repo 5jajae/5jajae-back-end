@@ -5,6 +5,7 @@ import com.ojajae.common.exception.NotFoundException
 import com.ojajae.domain.item_tag.service.ItemTagStoreService
 import com.ojajae.domain.store.entity.Store
 import com.ojajae.domain.store.exception.StoreException
+import com.ojajae.domain.store.form.request.StoreListRequestForm
 import com.ojajae.domain.store.form.request.StoreRequestForm
 import com.ojajae.domain.store.form.response.StoreDetailResponseForm
 import com.ojajae.domain.store.form.response.StoreListResponse
@@ -21,8 +22,10 @@ class StoreService(
     private val storeRepository: StoreRepository,
 ) {
     @Transactional(readOnly = true)
-    fun getStoreList(): StoreListResponseForm {
-        val stores = storeRepository.findAll()
+    fun getStoreList(
+        request: StoreListRequestForm,
+    ): StoreListResponseForm {
+        val stores = storeRepository.getStoreList(request = request)
         val storeIds = stores.mapNotNull { it.id }
         val storeFiles = storeFileService.findFirstImageByStoreIdIn(storeIds = storeIds).associateBy { it.storeId }
         val tags = itemTagStoreService.findByStoreIdIn(storeIds = storeIds).groupBy { it.storeId }
