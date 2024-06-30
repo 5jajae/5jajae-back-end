@@ -13,9 +13,23 @@ interface DashboardRepository: JpaRepository<Dashboard, Int>, DashboardCustomRep
 
 interface DashboardCustomRepository {
     fun getDashboard(form: DashboardRequestForm): Dashboard?
+
+    fun count(form: DashboardRequestForm): Long
 }
 
 class DashboardRepositoryImpl: QuerydslRepositorySupport(Dashboard::class.java), DashboardCustomRepository {
+    override fun count(form: DashboardRequestForm): Long {
+        return from(dashboard)
+            .where(
+                eqStoreId(form.storeId)
+            )
+            .groupBy(dashboard.dashboardType, dashboard.storeId)
+            .select(
+                dashboard.count.sum()
+            )
+            .fetchOne()?:0L
+    }
+
     override fun getDashboard(form: DashboardRequestForm): Dashboard? {
         return from(dashboard)
             .where(

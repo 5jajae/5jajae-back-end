@@ -27,6 +27,8 @@ data class StoreDetailResponseForm(
 
     val identificationNumber: String?,
 
+    val storeReadCount: Long,
+
     val storeFiles: List<StoreFileResponse> = emptyList(),
 
     val itemTags: List<ItemTagStoreResponseForm>? = emptyList(),
@@ -34,6 +36,7 @@ data class StoreDetailResponseForm(
     companion object {
         fun of(
             store: Store,
+            storeReadCount: Long,
             storeFiles: List<StoreFileResponse> = emptyList(),
             itemTags: List<ItemTagStoreResponseForm> = emptyList(),
         ): StoreDetailResponseForm {
@@ -49,6 +52,7 @@ data class StoreDetailResponseForm(
                 openingHours = store.openingHours,
                 representativeName = store.representativeName,
                 identificationNumber = store.identificationNumber,
+                storeReadCount = storeReadCount,
                 itemTags = itemTags,
                 storeFiles = storeFiles,
             )
