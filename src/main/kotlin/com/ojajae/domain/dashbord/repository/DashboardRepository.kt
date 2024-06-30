@@ -7,12 +7,10 @@ import com.ojajae.domain.dashbord.form.request.DashboardRequestForm
 import com.querydsl.core.types.dsl.BooleanExpression
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
-import org.springframework.stereotype.Repository
 
-interface DashboardRepository: JpaRepository<Dashboard, Int> {
+interface DashboardRepository: JpaRepository<Dashboard, Int>, DashboardCustomRepository {
 }
 
-@Repository
 interface DashboardCustomRepository {
     fun getDashboard(form: DashboardRequestForm): Dashboard?
 }
@@ -22,7 +20,8 @@ class DashboardRepositoryImpl: QuerydslRepositorySupport(Dashboard::class.java),
         return from(dashboard)
             .where(
                 eqStoreId(form.storeId),
-                eqDashboardType(form.type),
+                eqDashboardType(form.dashboardType),
+                eqIpAddress(form.clientIp),
             )
             .fetchOne()
     }
@@ -35,6 +34,13 @@ class DashboardRepositoryImpl: QuerydslRepositorySupport(Dashboard::class.java),
 
     private fun eqDashboardType(dashboardType: DashboardType): BooleanExpression {
         return dashboard.dashboardType.eq(dashboardType)
+    }
+
+    private fun eqIpAddress(ipAddress: String?): BooleanExpression? {
+        if (ipAddress == null) {
+            return null
+        }
+        return dashboard.ipAddress.eq(ipAddress)
     }
 }
 
