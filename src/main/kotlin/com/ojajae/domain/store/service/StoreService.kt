@@ -60,7 +60,7 @@ class StoreService(
             store = store,
             storeReadCount = storeReadCount,
             itemTags = tags,
-            storeFiles = storeFiles,
+            imageUrls = storeFiles.map { it.imageUrl },
         )
     }
 }
