@@ -10,8 +10,10 @@ class WebConfig: WebMvcConfigurer {
         registry.addMapping("/**")
             .allowedOriginPatterns(
                 "https://www.ojajae.com",
+                "https://ojajae.com",
                 "http://localhost:3000",
             )
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowCredentials(true)
     }
 }
