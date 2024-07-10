@@ -13,6 +13,5 @@ class WebConfig: WebMvcConfigurer {
                 "http://localhost:3000",
             )
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-            .allowCredentials(true)
     }
 }
