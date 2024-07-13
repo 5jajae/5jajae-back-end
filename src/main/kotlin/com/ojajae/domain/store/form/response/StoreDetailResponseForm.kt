@@ -27,6 +27,8 @@ data class StoreDetailResponseForm(
 
     val identificationNumber: String?,
 
+    val items: String?,
+
     val storeReadCount: Long,
 
     val imageUrls: List<String>,
@@ -54,6 +56,7 @@ data class StoreDetailResponseForm(
                 openingHours = store.openingHours,
                 representativeName = store.representativeName,
                 identificationNumber = store.identificationNumber,
+                items = store.items,
                 storeReadCount = storeReadCount,
                 itemTags = itemTags,
                 imageUrls = imageUrls,
