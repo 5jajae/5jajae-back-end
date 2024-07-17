@@ -13,6 +13,9 @@ class ItemTagStoreService(
     }
 
     fun findByStoreIdIn(storeIds: List<Int>): List<ItemTagStoreResponseForm> {
-        return itemTagStoreRepository.findByStoreIdIn(storeIds = storeIds).map { ItemTagStoreResponseForm.of(it) }
+        return itemTagStoreRepository.findByStoreIdIn(storeIds = storeIds)
+            .map {
+                ItemTagStoreResponseForm.of(itemTagStoreVO = it)
+            }
     }
 }
