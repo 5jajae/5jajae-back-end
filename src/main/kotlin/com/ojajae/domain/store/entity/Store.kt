@@ -26,4 +26,18 @@ class Store(
     var identificationNumber: String?,
 
     var items: String?,
-): MutableEntity<Int>()
+): MutableEntity<Int>() {
+    fun update(param: Store) {
+        this.name = param.name
+        this.descriptions = param.descriptions
+        this.address = param.address
+        this.lat = param.lat
+        this.lng = param.lng
+        this.contactNumber = param.contactNumber
+        this.homepage = param.homepage
+        this.openingHours = param.openingHours
+        this.representativeName = param.representativeName
+        this.identificationNumber = param.identificationNumber
+        this.items = param.items
+    }
+}
