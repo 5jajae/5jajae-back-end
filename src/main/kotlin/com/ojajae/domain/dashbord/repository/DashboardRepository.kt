@@ -21,7 +21,7 @@ class DashboardRepositoryImpl: QuerydslRepositorySupport(Dashboard::class.java),
     override fun count(form: DashboardSelectForm): Long {
         return from(dashboard)
             .where(
-                eqStoreId(form.storeId)
+                eqStoreId(form.storeId), eqDashboardType(form.dashboardType)
             )
             .groupBy(dashboard.dashboardType, dashboard.storeId)
             .select(
