@@ -3,7 +3,7 @@ package com.ojajae.domain.dashbord.repository
 import com.ojajae.domain.dashbord.entity.Dashboard
 import com.ojajae.domain.dashbord.entity.DashboardType
 import com.ojajae.domain.dashbord.entity.QDashboard.dashboard
-import com.ojajae.domain.dashbord.form.request.DashboardRequestForm
+import com.ojajae.domain.dashbord.form.request.DashboardSelectForm
 import com.querydsl.core.types.dsl.BooleanExpression
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
@@ -12,13 +12,13 @@ interface DashboardRepository: JpaRepository<Dashboard, Int>, DashboardCustomRep
 }
 
 interface DashboardCustomRepository {
-    fun getDashboard(form: DashboardRequestForm): Dashboard?
+    fun getDashboard(form: DashboardSelectForm): Dashboard?
 
-    fun count(form: DashboardRequestForm): Long
+    fun count(form: DashboardSelectForm): Long
 }
 
 class DashboardRepositoryImpl: QuerydslRepositorySupport(Dashboard::class.java), DashboardCustomRepository {
-    override fun count(form: DashboardRequestForm): Long {
+    override fun count(form: DashboardSelectForm): Long {
         return from(dashboard)
             .where(
                 eqStoreId(form.storeId)
@@ -30,7 +30,7 @@ class DashboardRepositoryImpl: QuerydslRepositorySupport(Dashboard::class.java),
             .fetchOne()?:0L
     }
 
-    override fun getDashboard(form: DashboardRequestForm): Dashboard? {
+    override fun getDashboard(form: DashboardSelectForm): Dashboard? {
         return from(dashboard)
             .where(
                 eqStoreId(form.storeId),
@@ -57,23 +57,3 @@ class DashboardRepositoryImpl: QuerydslRepositorySupport(Dashboard::class.java),
         return dashboard.ipAddress.eq(ipAddress)
     }
 }
-
-//class DashboardRepositoryImpl (
-//    private val jpaQueryFactory: JPAQueryFactory
-//): DashboardCustomRepository {
-//
-//    override fun getDashboard(form: DashboardRequestForm): Dashboard? {
-//        val qDashboard = QDashboard.dashboard
-//
-//        val whereExpression: BooleanExpression = qDashboard.dashboardType.eq(form.type)
-//        if (form.type == DashboardType.STORE_COUNT) {
-//            whereExpression.and(qDashboard.storeId.eq(form.storeId))
-//        }
-//
-//        val query = jpaQueryFactory
-//            .selectFrom(qDashboard)
-//            .where(whereExpression)
-//
-//        return query.fetchOne()
-//    }
-//}

@@ -23,4 +23,6 @@ class Dashboard(
 
 enum class DashboardType {
     STORE_COUNT
+    , STORE_CALL
+    , STORE_SHARE
 }

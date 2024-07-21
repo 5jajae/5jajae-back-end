@@ -3,7 +3,7 @@ package com.ojajae.domain.store.service
 import com.ojajae.common.DEFAULT_IMAGE_PATH
 import com.ojajae.common.exception.NotFoundException
 import com.ojajae.domain.dashbord.entity.DashboardType
-import com.ojajae.domain.dashbord.form.request.DashboardRequestForm
+import com.ojajae.domain.dashbord.form.request.DashboardSelectForm
 import com.ojajae.domain.dashbord.repository.DashboardRepository
 import com.ojajae.domain.item_tag.service.ItemTagStoreService
 import com.ojajae.domain.store.entity.Store
@@ -51,10 +51,12 @@ class StoreService(
             ?: throw NotFoundException(StoreException.NotFoundStore)
         val storeFiles = storeFileService.findImagesByStoreId(store.id!!)
         val tags = itemTagStoreService.findByStoreId(store.id!!)
-        val storeReadCount = dashboardRepository.count(DashboardRequestForm(
-            dashboardType = DashboardType.STORE_COUNT,
-            storeId = storeId,
-        ))
+        val storeReadCount = dashboardRepository.count(
+            DashboardSelectForm(
+                dashboardType = DashboardType.STORE_COUNT,
+                storeId = storeId,
+            )
+        )
 
         return StoreDetailResponseForm.of(
             store = store,

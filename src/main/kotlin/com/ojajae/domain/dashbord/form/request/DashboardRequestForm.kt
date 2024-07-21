@@ -6,4 +6,12 @@ data class DashboardRequestForm(
     val dashboardType: DashboardType,
     val storeId: Int?,
     var clientIp: String? = null,
-)
+) {
+    fun toDashboardSelectForm(): DashboardSelectForm {
+        return DashboardSelectForm(
+            dashboardType = this.dashboardType
+            , storeId = this.storeId
+            , clientIp = this.clientIp
+        )
+    }
+}
