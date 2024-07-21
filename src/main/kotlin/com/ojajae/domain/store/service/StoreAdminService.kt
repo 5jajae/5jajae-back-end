@@ -4,18 +4,23 @@ import com.ojajae.common.entity.form.PageResponseForm
 import com.ojajae.common.entity.form.Pagination
 import com.ojajae.common.exception.BadRequestException
 import com.ojajae.common.exception.NotFoundException
+import com.ojajae.common.utils.generateRandomString
 import com.ojajae.domain.item_tag.entity.ItemTagStore
 import com.ojajae.domain.item_tag.form.request.StorePageRequestForm
 import com.ojajae.domain.item_tag.service.ItemTagStoreAdminService
+import com.ojajae.domain.s3.S3Service
+import com.ojajae.domain.store.entity.StoreFile
 import com.ojajae.domain.store.exception.StoreException
 import com.ojajae.domain.store.form.request.StoreSaveRequestForm
 import com.ojajae.domain.store.form.response.StoreAdminDetailResponse
 import com.ojajae.domain.store.form.response.StoreAdminPageResponseForm
 import com.ojajae.domain.store.repository.StoreRepository
+import org.apache.commons.io.FilenameUtils
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 @Service
 @Transactional(readOnly = true)
@@ -24,6 +29,8 @@ class StoreAdminService(
     private val storeFileAdminService: StoreFileAdminService,
 
     private val storeRepository: StoreRepository,
+
+    private val s3Service: S3Service,
 ) {
     @Transactional
     fun saveStore(requestForm: StoreSaveRequestForm) {
@@ -31,6 +38,29 @@ class StoreAdminService(
 
         val store = requestForm.toEntity()
         storeRepository.save(store)
+
+        if (!requestForm.images.isNullOrEmpty()) {
+            val images = requestForm.images.mapIndexedNotNull { idx, file ->
+                val extension = file.originalFilename?.let {
+                    FilenameUtils.getExtension(it)
+                } ?: "jpg"
+                val fileUrl = generateFileUrl(extension)
+
+                if (s3Service.uploadFile(path = fileUrl, file = file)) {
+                    StoreFile(
+                        storeId = store.id!!,
+                        fileUrl = fileUrl,
+                        order = idx + 1,
+                    )
+                } else {
+                    null
+                }
+            }
+
+            if (images.isNotEmpty()) {
+                storeFileAdminService.saveAllStoreFiles(files = images)
+            }
+        }
 
         itemTagStoreAdminService.saveItemTagStores(requestForm.itemTagIds.map {
             ItemTagStore(
@@ -81,6 +111,8 @@ class StoreAdminService(
 
         store.update(param = requestForm.toEntity())
 
+        // file image 업로드 추가(기존꺼 다 삭제하고 업로드 할건지, 구분할건지 필요)
+
         itemTagStoreAdminService.deleteByItemTagStoreByStoreId(storeId = storeId)
         itemTagStoreAdminService.saveItemTagStores(requestForm.itemTagIds.map {
             ItemTagStore(
@@ -94,5 +126,11 @@ class StoreAdminService(
         if (requestForm.itemTagIds.isEmpty()) {
             throw BadRequestException(StoreException.ItemTagIdsIsEmpty)
         }
+    }
+
+    private fun generateFileUrl(extension: String): String {
+        val now = LocalDate.now()
+
+        return "ojajae/upload/store/${now.year}/${now.monthValue}/${generateRandomString()}.${extension}"
     }
 }

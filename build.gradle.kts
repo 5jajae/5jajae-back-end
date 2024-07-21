@@ -51,6 +51,8 @@ dependencies {
 	// aws
 	implementation("io.awspring.cloud:spring-cloud-starter-aws:2.4.4")
 
+	// apache
+	implementation("commons-io:commons-io:2.16.1")
 }
 
 kotlin {

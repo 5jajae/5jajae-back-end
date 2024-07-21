@@ -18,6 +18,7 @@ interface StoreRepository: JpaRepository<Store, Int>, StoreCustomRepository, Loc
 
 interface StoreCustomRepository {
     fun getStoreList(request: StoreListRequestForm): List<Store>
+
     fun getStore(form: StoreDetailRequestForm): Store?
 
     fun getStorePage(requestForm: StorePageRequestForm, pageable: Pageable): Page<Store>
