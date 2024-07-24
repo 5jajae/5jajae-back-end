@@ -1,6 +1,5 @@
 package com.ojajae.domain.store.form.response
 
-import com.ojajae.common.DEFAULT_IMAGE_PATH
 import com.ojajae.domain.item_tag.form.ItemTagStoreResponseForm
 import com.ojajae.domain.store.entity.Store
 

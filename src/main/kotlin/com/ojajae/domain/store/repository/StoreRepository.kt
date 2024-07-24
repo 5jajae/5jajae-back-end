@@ -8,7 +8,6 @@ import com.ojajae.domain.store.form.request.StoreRequestForm
 import com.querydsl.core.types.dsl.BooleanExpression
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
-import org.springframework.stereotype.Repository
 
 interface StoreRepository: JpaRepository<Store, Int>, StoreCustomRepository
 
@@ -27,6 +26,7 @@ class StoreRepositoryImpl: QuerydslRepositorySupport(Store::class.java), StoreCu
             )
             .groupBy(store)
             .select(store)
+            .orderBy(store.id.desc())
             .fetch()
     }
 

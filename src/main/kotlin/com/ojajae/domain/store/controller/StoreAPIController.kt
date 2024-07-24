@@ -8,11 +8,7 @@ import com.ojajae.domain.store.form.response.StoreDetailResponseForm
 import com.ojajae.domain.store.form.response.StoreListResponseForm
 import com.ojajae.domain.store.service.StoreService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("$API_PREFIX/stores")

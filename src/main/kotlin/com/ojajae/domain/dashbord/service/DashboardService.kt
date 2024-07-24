@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 
-
 @Service
 class DashboardService(
     private val dashboardRepository: DashboardRepository,
