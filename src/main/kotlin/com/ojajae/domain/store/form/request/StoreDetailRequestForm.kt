@@ -1,5 +1,5 @@
 package com.ojajae.domain.store.form.request
 
-data class StoreRequestForm(
+data class StoreDetailRequestForm(
     val storeId: Int
 )

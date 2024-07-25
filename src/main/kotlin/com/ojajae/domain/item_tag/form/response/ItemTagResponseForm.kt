@@ -1,4 +1,4 @@
-package com.ojajae.domain.item_tag.form
+package com.ojajae.domain.item_tag.form.response
 
 import com.ojajae.domain.item_tag.entity.ItemTag
 

@@ -8,4 +8,9 @@ class ItemTag(
     var name: String,
 
     var imageUrl: String,
-): MutableEntity<Int>()
+): MutableEntity<Int>() {
+    fun update(param: ItemTag) {
+        this.name = param.name
+        this.imageUrl = param.imageUrl
+    }
+}

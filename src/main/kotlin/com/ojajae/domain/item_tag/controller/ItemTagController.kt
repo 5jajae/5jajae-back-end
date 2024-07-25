@@ -2,7 +2,7 @@ package com.ojajae.domain.item_tag.controller
 
 import com.ojajae.common.API_PREFIX
 import com.ojajae.common.web.ResultDTO
-import com.ojajae.domain.item_tag.form.ItemTagListResponseForm
+import com.ojajae.domain.item_tag.form.response.ItemTagListResponseForm
 import com.ojajae.domain.item_tag.service.ItemTagService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

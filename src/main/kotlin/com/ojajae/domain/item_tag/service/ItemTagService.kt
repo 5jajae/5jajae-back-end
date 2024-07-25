@@ -1,6 +1,6 @@
 package com.ojajae.domain.item_tag.service
 
-import com.ojajae.domain.item_tag.form.ItemTagResponseForm
+import com.ojajae.domain.item_tag.form.response.ItemTagResponseForm
 import com.ojajae.domain.item_tag.repository.ItemTagRepository
 import com.ojajae.domain.s3.S3Service
 import org.springframework.stereotype.Service

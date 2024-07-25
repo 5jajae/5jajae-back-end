@@ -9,7 +9,7 @@ import com.ojajae.domain.item_tag.service.ItemTagStoreService
 import com.ojajae.domain.store.entity.Store
 import com.ojajae.domain.store.exception.StoreException
 import com.ojajae.domain.store.form.request.StoreListRequestForm
-import com.ojajae.domain.store.form.request.StoreRequestForm
+import com.ojajae.domain.store.form.request.StoreDetailRequestForm
 import com.ojajae.domain.store.form.response.StoreDetailResponseForm
 import com.ojajae.domain.store.form.response.StoreListResponse
 import com.ojajae.domain.store.form.response.StoreListResponseForm
@@ -47,7 +47,7 @@ class StoreService(
 
     @Transactional(readOnly = true)
     fun getStore(storeId: Int): StoreDetailResponseForm {
-        val store: Store = storeRepository.getStore(StoreRequestForm(storeId = storeId))
+        val store: Store = storeRepository.getStore(StoreDetailRequestForm(storeId = storeId))
             ?: throw NotFoundException(StoreException.NotFoundStore)
         val storeFiles = storeFileService.findImagesByStoreId(store.id!!)
         val tags = itemTagStoreService.findByStoreId(store.id!!)
