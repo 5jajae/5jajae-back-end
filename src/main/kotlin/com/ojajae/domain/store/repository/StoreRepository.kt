@@ -3,7 +3,7 @@ package com.ojajae.domain.store.repository
 import com.ojajae.common.repository.LockableRepository
 import com.ojajae.common.utils.fetchPage
 import com.ojajae.domain.item_tag.entity.QItemTagStore.itemTagStore
-import com.ojajae.domain.item_tag.form.request.StorePageRequestForm
+import com.ojajae.domain.store.form.request.StorePageRequestForm
 import com.ojajae.domain.store.entity.QStore.store
 import com.ojajae.domain.store.entity.Store
 import com.ojajae.domain.store.form.request.StoreListRequestForm

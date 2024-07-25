@@ -6,7 +6,7 @@ import com.ojajae.common.exception.BadRequestException
 import com.ojajae.common.exception.NotFoundException
 import com.ojajae.common.utils.generateRandomString
 import com.ojajae.domain.item_tag.entity.ItemTagStore
-import com.ojajae.domain.item_tag.form.request.StorePageRequestForm
+import com.ojajae.domain.store.form.request.StorePageRequestForm
 import com.ojajae.domain.item_tag.service.ItemTagStoreAdminService
 import com.ojajae.domain.s3.S3Service
 import com.ojajae.domain.store.entity.StoreFile
