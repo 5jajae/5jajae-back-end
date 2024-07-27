@@ -23,7 +23,7 @@ class StoreFileService(
 
     @Transactional(readOnly = true)
     fun findFirstImageByStoreIdIn(storeIds: List<Int>): List<StoreFileResponse> {
-        return storeFileRepository.findFirstImageByStoreIdIn(storeIds).map {
+        return storeFileRepository.findThumbnailImageByStoreIdIn(storeIds).map {
             StoreFileResponse.of(
                 storeFile = it,
                 imageUrl = s3Service.getPresignedUrl(it.fileUrl),

@@ -9,7 +9,7 @@ interface StoreFileRepository : JpaRepository<StoreFile, Int>, StoreFileCustomRe
 
 interface StoreFileCustomRepository {
     fun findImagesByStoreId(storeId: Int): List<StoreFile>
-    fun findFirstImageByStoreIdIn(storeIds: List<Int>): List<StoreFile>
+    fun findThumbnailImageByStoreIdIn(storeIds: List<Int>): List<StoreFile>
 }
 
 class StoreFileCustomImpl : StoreFileCustomRepository, QuerydslRepositorySupport(StoreFile::class.java) {
@@ -19,7 +19,7 @@ class StoreFileCustomImpl : StoreFileCustomRepository, QuerydslRepositorySupport
         ).fetch()
     }
 
-    override fun findFirstImageByStoreIdIn(storeIds: List<Int>): List<StoreFile> {
+    override fun findThumbnailImageByStoreIdIn(storeIds: List<Int>): List<StoreFile> {
         if (storeIds.isEmpty()) {
             return emptyList()
         }
