@@ -12,7 +12,7 @@ data class DashboardSaveRequestForm(
         return DashboardSelectForm(
             dashboardType = this.dashboardType!!
             , storeId = this.storeId
-            , clientIp = clientIp
+            , clientIP = clientIp
         )
     }
 }

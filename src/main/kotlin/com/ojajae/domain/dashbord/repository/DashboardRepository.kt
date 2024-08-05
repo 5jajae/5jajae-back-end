@@ -7,6 +7,7 @@ import com.ojajae.domain.dashbord.form.request.DashboardSelectForm
 import com.querydsl.core.types.dsl.BooleanExpression
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
+import java.time.LocalDate
 
 interface DashboardRepository: JpaRepository<Dashboard, Int>, DashboardCustomRepository {
 }
@@ -35,7 +36,8 @@ class DashboardRepositoryImpl: QuerydslRepositorySupport(Dashboard::class.java),
             .where(
                 eqStoreId(form.storeId),
                 eqDashboardType(form.dashboardType),
-                eqIpAddress(form.clientIp),
+                eqIpAddress(form.clientIP),
+                eqStoredAt(form.storedAt),
             )
             .fetchOne()
     }
@@ -51,9 +53,15 @@ class DashboardRepositoryImpl: QuerydslRepositorySupport(Dashboard::class.java),
     }
 
     private fun eqIpAddress(ipAddress: String?): BooleanExpression? {
-        if (ipAddress == null) {
+        if (ipAddress.isNullOrBlank()) {
             return null
         }
         return dashboard.ipAddress.eq(ipAddress)
+    }
+
+    private fun eqStoredAt(storedAt: LocalDate?): BooleanExpression? {
+        return storedAt?.let {
+            dashboard.storedAt.eq(it)
+        }
     }
 }

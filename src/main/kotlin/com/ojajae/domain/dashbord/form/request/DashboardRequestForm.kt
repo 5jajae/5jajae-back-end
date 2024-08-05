@@ -11,7 +11,7 @@ data class DashboardRequestForm(
         return DashboardSelectForm(
             dashboardType = this.dashboardType
             , storeId = this.storeId
-            , clientIp = this.clientIp
+            , clientIP = this.clientIp
         )
     }
 }
