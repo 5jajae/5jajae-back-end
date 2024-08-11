@@ -2,9 +2,11 @@ package com.ojajae.domain.dashbord.repository
 
 import com.ojajae.domain.dashbord.entity.Dashboard
 import com.ojajae.domain.dashbord.entity.DashboardType
+import com.ojajae.domain.dashbord.entity.QDashboard
 import com.ojajae.domain.dashbord.entity.QDashboard.dashboard
 import com.ojajae.domain.dashbord.form.request.DashboardSelectForm
 import com.querydsl.core.types.dsl.BooleanExpression
+import jakarta.persistence.LockModeType
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import java.time.LocalDate
@@ -14,6 +16,8 @@ interface DashboardRepository: JpaRepository<Dashboard, Int>, DashboardCustomRep
 
 interface DashboardCustomRepository {
     fun getDashboard(form: DashboardSelectForm): Dashboard?
+
+    fun getDashboardWithWriteLock(form: DashboardSelectForm): Dashboard?
 
     fun count(form: DashboardSelectForm): Long
 }
@@ -40,6 +44,20 @@ class DashboardRepositoryImpl: QuerydslRepositorySupport(Dashboard::class.java),
                 eqStoredAt(form.storedAt),
             )
             .fetchOne()
+    }
+
+    override fun getDashboardWithWriteLock(form: DashboardSelectForm): Dashboard? {
+        val query = querydsl!!.createQuery<Dashboard>().from(dashboard)
+
+        query.setLockMode(LockModeType.PESSIMISTIC_WRITE)
+
+        return query.where(
+            eqStoreId(form.storeId),
+            eqDashboardType(form.dashboardType),
+            eqIpAddress(form.clientIP),
+            eqStoredAt(form.storedAt),
+        )
+        .fetchOne()
     }
 
     private fun eqStoreId(storeId: Int?): BooleanExpression? {

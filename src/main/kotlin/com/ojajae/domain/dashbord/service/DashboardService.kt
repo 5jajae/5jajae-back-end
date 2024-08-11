@@ -44,7 +44,7 @@ class DashboardService(
     @Transactional
     fun readStoreList(clientIP: String) {
         val now = LocalDate.now()
-        val findDashboard = dashboardRepository.getDashboard(DashboardSelectForm(
+        val findDashboard = dashboardRepository.getDashboardWithWriteLock(DashboardSelectForm(
             dashboardType = DashboardType.STORE_LIST,
             storeId = null,
             clientIP = clientIP,
