@@ -57,7 +57,7 @@ class DashboardRepositoryImpl: QuerydslRepositorySupport(Dashboard::class.java),
             eqIpAddress(form.clientIP),
             eqStoredAt(form.storedAt),
         )
-        .fetchOne()
+        .fetchFirst()
     }
 
     private fun eqStoreId(storeId: Int?): BooleanExpression? {
