@@ -30,7 +30,7 @@ class StoreFileAdminService(
             return
         }
 
-        storeFileRepository
+        storeFileRepository.deleteAllByStoreIdAndFileUrlIn(storeId = storeId, fileUrls = imageUrls)
     }
 
     fun findImagesByStoreId(storeId: Int): List<StoreImageAdminResponse> {

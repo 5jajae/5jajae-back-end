@@ -76,7 +76,8 @@ class StoreAdminService(
     }
 
     fun getStoreById(storeId: Int): StoreAdminDetailResponse {
-        val store = storeRepository.findByIdOrNull(id = storeId) ?: throw NotFoundException(StoreException.NotFoundStore)
+        val store = storeRepository.findByIdOrNull(id = storeId)
+            ?: throw NotFoundException(StoreException.NotFoundStore)
         val itemTagStores = itemTagStoreAdminService.findByStoreId(storeId = storeId)
         val storeFiles = storeFileAdminService.findImagesByStoreId(storeId = storeId)
 
@@ -99,15 +100,35 @@ class StoreAdminService(
 
         store.update(param = requestForm.toEntity())
 
-        val images = storeFileAdminService.findImagesByStoreIdForUpdate(storeId = storeId)
+        val prevImages = storeFileAdminService.findImagesByStoreIdForUpdate(storeId = storeId)
 
-        if (images.isNotEmpty() && !requestForm.imageUrls.isNullOrEmpty()) {
-            val deleteTarget = images.filter { it.fileUrl !in requestForm.imageUrls }
+        if (prevImages.isNotEmpty() || !requestForm.imageUrls.isNullOrEmpty()) {
+            val deleteTarget = if (prevImages.isNotEmpty()) {
+                if (requestForm.imageUrls.isNullOrEmpty()) {
+                    prevImages
+                } else {
+                    prevImages.filter { it.fileUrl !in requestForm.imageUrls }
+                }
+            } else {
+                emptyList()
+            }
+            val prevImageUrls = prevImages.map { it.fileUrl }
+            val saveTarget = requestForm.imageUrls?.filter { it !in prevImageUrls }
 
             if (deleteTarget.isNotEmpty()) {
                 deleteTarget.forEach { s3Service.deleteFile(it.fileUrl) }
 
                 storeFileAdminService.deleteByStoreIdAndImageUrls(storeId = storeId, imageUrls = deleteTarget.map { it.fileUrl })
+            }
+
+            if (!saveTarget.isNullOrEmpty()) {
+                storeFileAdminService.saveAllStoreFiles(saveTarget.mapIndexed { idx, imageUrl ->
+                    StoreFile(
+                        storeId = store.id!!,
+                        fileUrl = imageUrl,
+                        sort = idx + 1,
+                    )
+                })
             }
         }
 
