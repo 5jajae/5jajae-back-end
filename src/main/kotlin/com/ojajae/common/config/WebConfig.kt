@@ -11,6 +11,7 @@ class WebConfig: WebMvcConfigurer {
             .allowedOriginPatterns(
                 "https://www.ojajae.com",
                 "https://ojajae.com",
+                "https://admin.ojajae.com",
                 "http://localhost:3000",
                 "http://localhost:5173",
             )
