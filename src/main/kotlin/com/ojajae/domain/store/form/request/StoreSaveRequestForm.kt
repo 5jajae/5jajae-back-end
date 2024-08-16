@@ -1,7 +1,6 @@
 package com.ojajae.domain.store.form.request
 
 import com.ojajae.domain.store.entity.Store
-import org.springframework.web.multipart.MultipartFile
 
 data class StoreSaveRequestForm(
     val name: String = "",
@@ -16,7 +15,7 @@ data class StoreSaveRequestForm(
     val identificationNumber: String? = null,
     val items: String? = null,
 
-    val images: List<MultipartFile>? = null,
+    val imageUrls: List<String>? = null,
     val itemTagIds: List<Int> = emptyList(),
 ) {
     fun toEntity(): Store {

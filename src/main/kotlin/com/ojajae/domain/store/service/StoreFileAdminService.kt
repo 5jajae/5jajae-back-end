@@ -1,8 +1,8 @@
 package com.ojajae.domain.store.service
 
-import com.ojajae.domain.s3.S3Service
+import com.ojajae.domain.s3.service.S3Service
 import com.ojajae.domain.store.entity.StoreFile
-import com.ojajae.domain.store.form.response.StoreFileAdminResponse
+import com.ojajae.domain.store.form.response.StoreImageAdminResponse
 import com.ojajae.domain.store.repository.StoreFileRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -19,9 +19,23 @@ class StoreFileAdminService(
         storeFileRepository.saveAll(files)
     }
 
-    fun findImagesByStoreId(storeId: Int): List<StoreFileAdminResponse> {
+    @Transactional
+    fun findImagesByStoreIdForUpdate(storeId: Int): List<StoreFile> {
+        return storeFileRepository.findAllWithWriteLockByStoreId(storeId)
+    }
+
+    @Transactional
+    fun deleteByStoreIdAndImageUrls(storeId: Int, imageUrls: List<String>) {
+        if (imageUrls.isEmpty()) {
+            return
+        }
+
+        storeFileRepository
+    }
+
+    fun findImagesByStoreId(storeId: Int): List<StoreImageAdminResponse> {
         return storeFileRepository.findImagesByStoreId(storeId).map {
-            StoreFileAdminResponse.of(
+            StoreImageAdminResponse.of(
                 storeFile = it,
                 imageUrl = s3Service.getPresignedUrl(it.fileUrl),
             )

@@ -1,4 +1,4 @@
-package com.ojajae.domain.s3
+package com.ojajae.domain.s3.service
 
 import com.amazonaws.HttpMethod
 import com.amazonaws.services.s3.AmazonS3
@@ -15,7 +15,7 @@ import java.util.*
 
 @Service
 class S3Service(
-    private val amazonS3: AmazonS3
+    private val amazonS3: AmazonS3,
 ) {
     @Value("\${spring.cloud.aws.s3.bucket}")
     private lateinit var bucket: String
@@ -53,6 +53,12 @@ class S3Service(
                 tempFile.delete()
             }
         }
+    }
+
+    fun deleteFile(path: String) {
+        val request = DeleteObjectRequest(bucket, path)
+
+        amazonS3.deleteObject(request)
     }
 
     private fun getGeneratePresignedUrlRequest(bucket: String, fileName: String): GeneratePresignedUrlRequest? {

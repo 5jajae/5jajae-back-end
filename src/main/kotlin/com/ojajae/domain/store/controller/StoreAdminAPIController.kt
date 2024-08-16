@@ -3,6 +3,7 @@ package com.ojajae.domain.store.controller
 import com.ojajae.common.ADMIN_API_PREFIX
 import com.ojajae.common.controller.BaseAdminAPIController
 import com.ojajae.common.entity.form.PageResponseForm
+import com.ojajae.common.web.ResultDTO
 import com.ojajae.domain.store.form.request.StorePageRequestForm
 import com.ojajae.domain.store.form.request.StoreSaveRequestForm
 import com.ojajae.domain.store.form.response.StoreAdminDetailResponse
@@ -40,9 +41,11 @@ class StoreAdminAPIController(
     @GetMapping("/{storeId}")
     fun getStoreDetail(
         @PathVariable storeId: Int,
-    ): ResponseEntity<StoreAdminDetailResponse> {
+    ): ResponseEntity<ResultDTO<StoreAdminDetailResponse>> {
         return ResponseEntity.ok(
-            storeAdminService.getStoreById(storeId = storeId)
+            ResultDTO.createSuccess(
+                data = storeAdminService.getStoreById(storeId = storeId),
+            )
         )
     }
 

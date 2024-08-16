@@ -1,6 +1,6 @@
 package com.ojajae.domain.store.service
 
-import com.ojajae.domain.s3.S3Service
+import com.ojajae.domain.s3.service.S3Service
 import com.ojajae.domain.store.form.response.StoreFileResponse
 import com.ojajae.domain.store.repository.StoreFileRepository
 import org.springframework.stereotype.Service

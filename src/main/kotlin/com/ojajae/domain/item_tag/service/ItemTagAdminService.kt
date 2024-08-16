@@ -6,7 +6,7 @@ import com.ojajae.domain.item_tag.exception.ItemTagException
 import com.ojajae.domain.item_tag.form.request.ItemTagSaveRequestForm
 import com.ojajae.domain.item_tag.form.response.ItemTagAdminListResponseForm
 import com.ojajae.domain.item_tag.repository.ItemTagRepository
-import com.ojajae.domain.s3.S3Service
+import com.ojajae.domain.s3.service.S3Service
 import org.apache.commons.io.FilenameUtils
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

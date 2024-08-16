@@ -17,12 +17,12 @@ data class StoreAdminDetailResponse(
     val items: String?,
 
     val itemTagIds: List<Int>,
-    val storeFiles: List<StoreFileAdminResponse>,
+    val imageUrls: List<StoreImageAdminResponse>,
 ) {
     companion object {
         fun of(
             store: Store,
-            storeFiles: List<StoreFileAdminResponse>,
+            storeFiles: List<StoreImageAdminResponse>,
             itemTagStoreIds: List<Int>,
         ): StoreAdminDetailResponse {
             return StoreAdminDetailResponse(
@@ -40,7 +40,7 @@ data class StoreAdminDetailResponse(
                 items = store.items,
 
                 itemTagIds = itemTagStoreIds,
-                storeFiles = storeFiles,
+                imageUrls = storeFiles,
             )
         }
     }
