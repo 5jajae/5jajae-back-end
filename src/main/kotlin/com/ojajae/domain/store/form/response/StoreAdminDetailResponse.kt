@@ -15,6 +15,7 @@ data class StoreAdminDetailResponse(
     val representativeName: String?,
     val identificationNumber: String?,
     val items: String?,
+    val isConstruction: Boolean?,
 
     val itemTagIds: List<Int>,
     val imageUrls: List<StoreImageAdminResponse>,
@@ -38,6 +39,7 @@ data class StoreAdminDetailResponse(
                 representativeName = store.representativeName,
                 identificationNumber = store.identificationNumber,
                 items = store.items,
+                isConstruction = store.isConstruction,
 
                 itemTagIds = itemTagStoreIds,
                 imageUrls = storeFiles,

@@ -4,7 +4,7 @@ spring:
   application:
     name: ojajae
   datasource:
-    url: jdbc:mysql://${DB_URL}:3306/ojajae
+    url: jdbc:mysql://${DB_URL}:3306/ojajae?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf8&character_set_server=utf8mb4&useSSL=false&serverTimezone=Asia/Seoul
     driverClassName: com.mysql.cj.jdbc.Driver
     username: ${DB_USER}
     password: ${DB_PASSWORD}

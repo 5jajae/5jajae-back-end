@@ -15,6 +15,7 @@ data class StoreAdminPageResponseForm(
     val representativeName: String?,
     val identificationNumber: String?,
     val items: String?,
+    val isConstruction: Boolean?,
 ) {
     companion object {
         fun of(store: Store): StoreAdminPageResponseForm {
@@ -31,6 +32,7 @@ data class StoreAdminPageResponseForm(
                 representativeName = store.representativeName,
                 identificationNumber = store.identificationNumber,
                 items = store.items,
+                isConstruction = store.isConstruction,
             )
         }
     }
