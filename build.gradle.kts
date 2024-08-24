@@ -43,7 +43,7 @@ dependencies {
 	kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
 
 
-	implementation("org.postgresql:postgresql:42.7.3")
+	implementation("com.mysql:mysql-connector-j:9.0.0")
 
 	// swagger 설정
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")

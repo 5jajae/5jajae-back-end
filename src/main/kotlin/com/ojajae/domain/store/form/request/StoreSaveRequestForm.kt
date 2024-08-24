@@ -14,6 +14,7 @@ data class StoreSaveRequestForm(
     val representativeName: String? = null,
     val identificationNumber: String? = null,
     val items: String? = null,
+    val isConstruction: Boolean? = null,
 
     val imageUrls: List<String>? = null,
     val itemTagIds: List<Int> = emptyList(),
@@ -31,6 +32,7 @@ data class StoreSaveRequestForm(
             representativeName = representativeName,
             identificationNumber = identificationNumber,
             items = items,
+            isConstruction = isConstruction,
         )
     }
 }

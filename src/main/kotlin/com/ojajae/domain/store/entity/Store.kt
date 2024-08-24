@@ -1,6 +1,7 @@
 package com.ojajae.domain.store.entity
 
 import com.ojajae.common.entity.MutableEntity
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 
 @Entity
@@ -26,6 +27,9 @@ class Store(
     var identificationNumber: String?,
 
     var items: String?,
+
+    @get:Column(name = "is_construction")
+    var isConstruction: Boolean?,
 ): MutableEntity<Int>() {
     fun update(param: Store) {
         this.name = param.name
@@ -39,5 +43,6 @@ class Store(
         this.representativeName = param.representativeName
         this.identificationNumber = param.identificationNumber
         this.items = param.items
+        this.isConstruction = param.isConstruction
     }
 }

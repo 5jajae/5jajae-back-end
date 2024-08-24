@@ -4,8 +4,8 @@ spring:
   application:
     name: ojajae
   datasource:
-    url: jdbc:postgresql://${DB_URL}:5432/ojajae
-    driverClassName: org.postgresql.Driver
+    url: jdbc:mysql://${DB_URL}:3306/ojajae
+    driverClassName: com.mysql.cj.jdbc.Driver
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     hikari:
@@ -18,12 +18,12 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.MySQLDialect
         default_schema: ojajae
     hibernate:
       ddl-auto: validate
     show-sql: true
-    database: postgresql
+    database: mysql
   cloud:
     aws:
       region: ap-northeast-2
