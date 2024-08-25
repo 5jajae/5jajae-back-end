@@ -8,34 +8,54 @@ import com.ojajae.domain.store.entity.QStore.store
 import com.ojajae.domain.store.entity.Store
 import com.ojajae.domain.store.form.request.StoreListRequestForm
 import com.ojajae.domain.store.form.request.StoreDetailRequestForm
+import com.ojajae.domain.store.form.request.StoreListSortType
+import com.ojajae.domain.store.vo.StoreAppListVO
+import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.BooleanExpression
+import com.querydsl.core.types.dsl.Expressions
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
-interface StoreRepository: JpaRepository<Store, Int>, StoreCustomRepository, LockableRepository<Store, Int>
+interface StoreRepository : JpaRepository<Store, Int>, StoreCustomRepository, LockableRepository<Store, Int>
 
 interface StoreCustomRepository {
-    fun getStoreList(request: StoreListRequestForm): List<Store>
+    fun getStoreList(request: StoreListRequestForm): List<StoreAppListVO>
 
     fun getStore(form: StoreDetailRequestForm): Store?
 
     fun getStorePage(requestForm: StorePageRequestForm, pageable: Pageable): Page<Store>
 }
 
-class StoreRepositoryImpl: QuerydslRepositorySupport(Store::class.java), StoreCustomRepository {
-    override fun getStoreList(request: StoreListRequestForm): List<Store> {
-        return from(store)
+class StoreRepositoryImpl : QuerydslRepositorySupport(Store::class.java), StoreCustomRepository {
+    override fun getStoreList(request: StoreListRequestForm): List<StoreAppListVO> {
+        val distance = Expressions.numberTemplate(
+            Double::class.java,
+            "ST_Distance_Sphere(point({0}, {1}), point({2}, {3}))",
+            store.lng, store.lat, request.lng, request.lat
+        )
+        val query = from(store)
             .leftJoin(itemTagStore).on(itemTagStore.storeId.eq(store.id))
             .where(
                 addressLike(request.address),
                 itemTagIdIn(request.itemTagIds),
             )
             .groupBy(store)
-            .select(store)
-            .orderBy(store.id.desc())
-            .fetch()
+            .select(
+                Projections.constructor(
+                    StoreAppListVO::class.java,
+                    store.`as`("store"),
+                    distance.`as`("distance"),
+                )
+            )
+
+        when(request.sort) {
+            StoreListSortType.LATEST-> query.orderBy(store.id.desc())
+            StoreListSortType.DISTANCE-> query.orderBy(distance.asc())
+        }
+
+        return query.fetch()
     }
 
     override fun getStore(form: StoreDetailRequestForm): Store? {
@@ -66,6 +86,7 @@ class StoreRepositoryImpl: QuerydslRepositorySupport(Store::class.java), StoreCu
             store.address.like("%$it%")
         }
     }
+
     private fun itemTagIdIn(itemTagIds: List<Int>?): BooleanExpression? {
         if (itemTagIds.isNullOrEmpty()) {
             return null

@@ -17,12 +17,14 @@ data class StoreListResponse(
     val lng: Double,
     val thumbnailImage: String? = DEFAULT_IMAGE_PATH,
     val itemTags: List<ItemTagStoreResponseForm>? = emptyList(),
+    val distance: Double,
 ) {
     companion object {
         fun of(
             store: Store,
             thumbnailImage: String? = null,
             itemTags: List<ItemTagStoreResponseForm> = emptyList(),
+            distance: Double,
         ): StoreListResponse {
             return StoreListResponse(
                 id = store.id!!,
@@ -33,6 +35,7 @@ data class StoreListResponse(
                 lng = store.lng,
                 thumbnailImage = thumbnailImage,
                 itemTags = itemTags,
+                distance = distance,
             )
         }
     }

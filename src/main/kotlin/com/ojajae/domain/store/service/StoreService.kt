@@ -10,6 +10,7 @@ import com.ojajae.domain.store.entity.Store
 import com.ojajae.domain.store.exception.StoreException
 import com.ojajae.domain.store.form.request.StoreListRequestForm
 import com.ojajae.domain.store.form.request.StoreDetailRequestForm
+import com.ojajae.domain.store.form.request.StoreListSortType
 import com.ojajae.domain.store.form.response.StoreDetailResponseForm
 import com.ojajae.domain.store.form.response.StoreListResponse
 import com.ojajae.domain.store.form.response.StoreListResponseForm
@@ -30,16 +31,17 @@ class StoreService(
         request: StoreListRequestForm,
     ): StoreListResponseForm {
         val stores = storeRepository.getStoreList(request = request)
-        val storeIds = stores.mapNotNull { it.id }
+        val storeIds = stores.mapNotNull { it.store.id }
         val storeFiles = storeFileService.findFirstImageByStoreIdIn(storeIds = storeIds).associateBy { it.storeId }
         val tags = itemTagStoreService.findByStoreIdIn(storeIds = storeIds).groupBy { it.storeId }
 
         return StoreListResponseForm(
             stores = stores.map {
                 StoreListResponse.of(
-                    store = it,
-                    thumbnailImage = storeFiles[it.id!!]?.imageUrl ?: DEFAULT_IMAGE_PATH,
-                    itemTags = tags[it.id!!] ?: emptyList(),
+                    store = it.store,
+                    thumbnailImage = storeFiles[it.store.id!!]?.imageUrl ?: DEFAULT_IMAGE_PATH,
+                    itemTags = tags[it.store.id!!] ?: emptyList(),
+                    distance = it.distance,
                 )
             }
         )
