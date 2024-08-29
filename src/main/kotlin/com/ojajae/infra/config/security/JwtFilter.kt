@@ -55,9 +55,15 @@ class JwtFilter(
     }
 
     private fun getToken(request: HttpServletRequest): String? {
+        val cookie = request.cookies.find { it.name.equals("jwtToken") }
+        val jwtToken = cookie?.value
         val bearerToken = request.getHeader("Authorization")
         return if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             bearerToken.substring(7)
-        } else null
+        } else if(jwtToken != null) {
+            jwtToken
+        } else {
+            null
+        }
     }
 }
