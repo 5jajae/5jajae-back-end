@@ -53,6 +53,14 @@ dependencies {
 
 	// apache
 	implementation("commons-io:commons-io:2.16.1")
+
+	// spring security
+	implementation("org.springframework.boot:spring-boot-starter-security")
+
+	// jwt
+	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+	implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
 }
 
 kotlin {
