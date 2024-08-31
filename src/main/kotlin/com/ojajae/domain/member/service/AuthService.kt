@@ -1,8 +1,10 @@
 package com.ojajae.domain.member.service
 
+import com.ojajae.common.exception.BadCredentialException
 import com.ojajae.domain.member.entity.UserDetailsImpl
 import com.ojajae.domain.member.form.request.LoginRequestForm
 import com.ojajae.domain.member.form.response.LoginResponseForm
+import com.ojajae.domain.store.exception.AuthException
 import com.ojajae.infra.config.security.JwtUtil
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
@@ -27,10 +29,10 @@ class AuthService(
             return LoginResponseForm(jwtUtil.generateToken(userDetails.username))
         } catch (e: BadCredentialsException) {
             e.printStackTrace()
-            throw Exception("Invalid email/password supplied")
+            throw BadCredentialException(AuthException.BadCredential)
         } catch (e: Exception) {
             e.printStackTrace()
-            throw Exception("Internal server error: " + e.message)
+            throw e
         }
     }
 }

@@ -1,9 +1,11 @@
 package com.ojajae.infra.config.security
 
+import com.ojajae.common.ACCESS_TOKEN
 import com.ojajae.domain.member.service.UserDetailsServiceImpl
 import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
+import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -55,7 +57,8 @@ class JwtFilter(
     }
 
     private fun getToken(request: HttpServletRequest): String? {
-        val cookie = request.cookies.find { it.name.equals("jwtToken") }
+        val cookies: Array<Cookie>? = request.cookies
+        val cookie = cookies?.find { it.name.equals(ACCESS_TOKEN) }
         val jwtToken = cookie?.value
         val bearerToken = request.getHeader("Authorization")
         return if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
