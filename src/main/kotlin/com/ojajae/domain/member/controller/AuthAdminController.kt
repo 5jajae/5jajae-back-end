@@ -1,5 +1,6 @@
 package com.ojajae.domain.member.controller
 
+import com.ojajae.common.ACCESS_TOKEN
 import com.ojajae.common.ADMIN_API_PREFIX
 import com.ojajae.common.controller.BaseAdminAPIController
 import com.ojajae.domain.member.form.request.LoginRequestForm
@@ -26,7 +27,7 @@ class AuthAdminController(
         response: HttpServletResponse
     ): ResponseEntity<Nothing> {
         val loginResponseForm = authService.login(form)
-        val cookie = ResponseCookie.from("jwtToken", loginResponseForm.jwtToken)
+        val cookie = ResponseCookie.from(ACCESS_TOKEN, loginResponseForm.jwtToken)
             .path("/")
             .secure(true)
             .sameSite("None")
