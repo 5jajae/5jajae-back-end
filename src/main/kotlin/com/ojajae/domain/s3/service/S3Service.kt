@@ -22,7 +22,7 @@ class S3Service(
 
     val tmpDirPath = "/tmp/gsd"
 
-    private val EXPIRE_SECOND = (1000 * 60 * 2).toLong()
+    private val EXPIRE_SECOND = (1000 * 60 * 30).toLong() // 30분
 
     fun getPresignedUrl(fileName: String): String {
         val generatePresignedUrlRequest: GeneratePresignedUrlRequest? = getGeneratePresignedUrlRequest(bucket, fileName)
@@ -74,9 +74,9 @@ class S3Service(
 
     private fun getPresignedUrlExpiration(): Date {
         val expiration = Date()
-        var expTimeMillis: Long = expiration.getTime()
+        var expTimeMillis: Long = expiration.time
         expTimeMillis += EXPIRE_SECOND
-        expiration.setTime(expTimeMillis)
+        expiration.time = expTimeMillis
         return expiration
     }
 
