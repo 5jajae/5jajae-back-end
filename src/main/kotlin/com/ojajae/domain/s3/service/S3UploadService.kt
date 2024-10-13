@@ -26,11 +26,20 @@ class S3UploadService(
         } ?: "jpg"
         val fileUrl = generateFileUrl(prefix, extension)
 
-        if (s3Service.uploadFile(path = fileUrl, file = requestForm.file)) {
-            return FileUploadResponseForm(
-                fileUrl = s3Service.getPresignedUrl(fileUrl),
-                fileKey = fileUrl,
-            )
+        if ("thumbnail" == prefix) {
+            if (s3Service.uploadThumbnailFile(path = fileUrl, file = requestForm.file)) {
+                return FileUploadResponseForm(
+                    fileUrl = s3Service.getS3Url(fileUrl),
+                    fileKey = fileUrl,
+                )
+            }
+        } else {
+            if (s3Service.uploadFile(path = fileUrl, file = requestForm.file)) {
+                return FileUploadResponseForm(
+                    fileUrl = s3Service.getPresignedUrl(fileUrl),
+                    fileKey = fileUrl,
+                )
+            }
         }
 
         throw BadRequestException()

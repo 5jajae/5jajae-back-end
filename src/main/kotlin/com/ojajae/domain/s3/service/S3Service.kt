@@ -4,6 +4,8 @@ import com.amazonaws.HttpMethod
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.Headers
 import com.amazonaws.services.s3.model.*
+import com.ojajae.common.S3_FILE_URL_PREFIX
+import net.coobird.thumbnailator.Thumbnails
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
 import org.springframework.beans.factory.annotation.Value
@@ -12,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.io.File
 import java.io.IOException
 import java.util.*
+import javax.imageio.ImageIO
 
 @Service
 class S3Service(
@@ -27,6 +30,10 @@ class S3Service(
     fun getPresignedUrl(fileName: String): String {
         val generatePresignedUrlRequest: GeneratePresignedUrlRequest? = getGeneratePresignedUrlRequest(bucket, fileName)
         return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString()
+    }
+
+    fun getS3Url(filePath: String): String {
+        return S3_FILE_URL_PREFIX + filePath;
     }
 
     fun uploadFile(path: String, file: MultipartFile): Boolean {
@@ -53,6 +60,29 @@ class S3Service(
                 tempFile.delete()
             }
         }
+    }
+
+    fun uploadThumbnailFile(path: String, file: MultipartFile): Boolean {
+        val tempFile = createTempFile(FilenameUtils.getName(path))
+        val thumbnail = ImageIO.read(file.inputStream)
+
+        try {
+            Thumbnails.of(thumbnail)
+                .size(1024, 512)
+                .toFile(tempFile)
+
+            val request = PutObjectRequest(bucket, path, tempFile)
+
+            amazonS3.putObject(request)
+        } catch(e: AmazonS3Exception) {
+            throw e
+        } finally {
+            if (tempFile.exists()) {
+                tempFile.delete()
+            }
+        }
+
+        return true
     }
 
     fun deleteFile(path: String) {

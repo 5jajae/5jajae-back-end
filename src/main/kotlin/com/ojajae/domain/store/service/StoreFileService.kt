@@ -1,6 +1,7 @@
 package com.ojajae.domain.store.service
 
 import com.ojajae.domain.s3.service.S3Service
+import com.ojajae.domain.store.constant.StoreFileType
 import com.ojajae.domain.store.form.response.StoreFileResponse
 import com.ojajae.domain.store.repository.StoreFileRepository
 import org.springframework.stereotype.Service
@@ -13,7 +14,7 @@ class StoreFileService(
 ) {
     @Transactional(readOnly = true)
     fun findImagesByStoreId(storeId: Int): List<StoreFileResponse> {
-        return storeFileRepository.findImagesByStoreId(storeId).map {
+        return storeFileRepository.findImagesByStoreId(storeId, StoreFileType.MAIN_IMAGE).map {
             StoreFileResponse.of(
                 storeFile = it,
                 imageUrl = s3Service.getPresignedUrl(it.fileUrl),
@@ -26,7 +27,7 @@ class StoreFileService(
         return storeFileRepository.findThumbnailImageByStoreIdIn(storeIds).map {
             StoreFileResponse.of(
                 storeFile = it,
-                imageUrl = s3Service.getPresignedUrl(it.fileUrl),
+                imageUrl = s3Service.getS3Url(it.fileUrl),
             )
         }
     }

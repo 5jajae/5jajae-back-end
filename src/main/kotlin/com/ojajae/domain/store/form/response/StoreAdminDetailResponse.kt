@@ -18,12 +18,14 @@ data class StoreAdminDetailResponse(
     val isConstruction: Boolean?,
 
     val itemTagIds: List<Int>,
+    val thumbnailImage: StoreImageAdminResponse?,
     val imageUrls: List<StoreImageAdminResponse>,
 ) {
     companion object {
         fun of(
             store: Store,
             storeFiles: List<StoreImageAdminResponse>,
+            thumbnailImage: StoreImageAdminResponse?,
             itemTagStoreIds: List<Int>,
         ): StoreAdminDetailResponse {
             return StoreAdminDetailResponse(
@@ -42,6 +44,7 @@ data class StoreAdminDetailResponse(
                 isConstruction = store.isConstruction,
 
                 itemTagIds = itemTagStoreIds,
+                thumbnailImage = thumbnailImage,
                 imageUrls = storeFiles,
             )
         }

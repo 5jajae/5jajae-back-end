@@ -1,8 +1,10 @@
 package com.ojajae.domain.store.entity
 
 import com.ojajae.common.entity.ImmutableEntity
-import jakarta.persistence.Column
+import com.ojajae.domain.store.constant.StoreFileType
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 
 @Entity
 class StoreFile(
@@ -11,4 +13,7 @@ class StoreFile(
     var fileUrl: String,
 
     var sort: Int = 0,
+
+    @Enumerated(EnumType.STRING)
+    var fileType: StoreFileType
 ) : ImmutableEntity<Int>()

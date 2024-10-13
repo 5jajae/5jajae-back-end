@@ -7,6 +7,7 @@ import com.ojajae.common.exception.NotFoundException
 import com.ojajae.domain.item_tag.entity.ItemTagStore
 import com.ojajae.domain.item_tag.service.ItemTagStoreAdminService
 import com.ojajae.domain.s3.service.S3Service
+import com.ojajae.domain.store.constant.StoreFileType
 import com.ojajae.domain.store.entity.StoreFile
 import com.ojajae.domain.store.exception.StoreException
 import com.ojajae.domain.store.form.request.StorePageRequestForm
@@ -42,12 +43,24 @@ class StoreAdminService(
                     storeId = store.id!!,
                     fileUrl = imageUrl,
                     sort = idx + 1,
+                    fileType = StoreFileType.MAIN_IMAGE
                 )
             }
 
             if (images.isNotEmpty()) {
                 storeFileAdminService.saveAllStoreFiles(files = images)
             }
+        }
+
+        if (!requestForm.thumbnailImageUrl.isNullOrEmpty()) {
+            val image = StoreFile(
+                storeId = store.id!!,
+                fileUrl = requestForm.thumbnailImageUrl,
+                sort = 0,
+                fileType = StoreFileType.THUMBNAIL_IMAGE,
+            )
+
+            storeFileAdminService.saveAllStoreFiles(files = listOf(image))
         }
 
         itemTagStoreAdminService.saveItemTagStores(requestForm.itemTagIds.map {
@@ -79,11 +92,13 @@ class StoreAdminService(
         val store = storeRepository.findByIdOrNull(id = storeId)
             ?: throw NotFoundException(StoreException.NotFoundStore)
         val itemTagStores = itemTagStoreAdminService.findByStoreId(storeId = storeId)
-        val storeFiles = storeFileAdminService.findImagesByStoreId(storeId = storeId)
+        val storeFiles = storeFileAdminService.findImagesByStoreId(storeId = storeId, StoreFileType.MAIN_IMAGE)
+        val storeThumbnailFile = storeFileAdminService.findThumbnailImageByStoreId(storeId = storeId)
 
         return StoreAdminDetailResponse.of(
             store = store,
             storeFiles = storeFiles,
+            thumbnailImage = storeThumbnailFile,
             itemTagStoreIds = itemTagStores.map { it.id },
         )
     }
@@ -102,18 +117,13 @@ class StoreAdminService(
 
         val prevImages = storeFileAdminService.findImagesByStoreIdForUpdate(storeId = storeId)
 
-        if (prevImages.isNotEmpty() || !requestForm.imageUrls.isNullOrEmpty()) {
-            val deleteTarget = if (prevImages.isNotEmpty()) {
-                if (requestForm.imageUrls.isNullOrEmpty()) {
-                    prevImages
-                } else {
-                    prevImages.filter { it.fileUrl !in requestForm.imageUrls }
-                }
-            } else {
-                emptyList()
+        // 상점 메인 이미지 삭제 및 추가
+        if (prevImages.isNotEmpty() || !requestForm.imageUrls.isNullOrEmpty() || !requestForm.thumbnailImageUrl.isNullOrEmpty()) {
+            val deleteTarget = prevImages.filter {
+                (it.fileType == StoreFileType.MAIN_IMAGE && (requestForm.imageUrls?.contains(it.fileUrl) == false))
+                ||
+                (it.fileType == StoreFileType.THUMBNAIL_IMAGE && it.fileUrl != requestForm.thumbnailImageUrl)
             }
-            val prevImageUrls = prevImages.map { it.fileUrl }
-            val saveTarget = requestForm.imageUrls?.filter { it !in prevImageUrls }
 
             if (deleteTarget.isNotEmpty()) {
                 deleteTarget.forEach { s3Service.deleteFile(it.fileUrl) }
@@ -121,14 +131,28 @@ class StoreAdminService(
                 storeFileAdminService.deleteByStoreIdAndImageUrls(storeId = storeId, imageUrls = deleteTarget.map { it.fileUrl })
             }
 
+            val prevImageUrls = prevImages.filter{ it.fileType == StoreFileType.MAIN_IMAGE }.map { it.fileUrl }
+            val prevThumbnailImage = prevImages.find { it.fileType == StoreFileType.THUMBNAIL_IMAGE && it.fileUrl == requestForm.thumbnailImageUrl }
+            val saveTarget = requestForm.imageUrls?.filter { it !in prevImageUrls }
+
             if (!saveTarget.isNullOrEmpty()) {
                 storeFileAdminService.saveAllStoreFiles(saveTarget.mapIndexed { idx, imageUrl ->
                     StoreFile(
                         storeId = store.id!!,
                         fileUrl = imageUrl,
                         sort = idx + 1,
+                        fileType = StoreFileType.MAIN_IMAGE
                     )
                 })
+            }
+
+            if (prevThumbnailImage == null && !requestForm.thumbnailImageUrl.isNullOrEmpty()) {
+                storeFileAdminService.saveAllStoreFiles(listOf(StoreFile(
+                    storeId = store.id!!,
+                    fileUrl = requestForm.thumbnailImageUrl,
+                    sort = 1,
+                    fileType = StoreFileType.THUMBNAIL_IMAGE
+                )))
             }
         }
 

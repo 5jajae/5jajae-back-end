@@ -1,6 +1,7 @@
 package com.ojajae.domain.store.service
 
 import com.ojajae.domain.s3.service.S3Service
+import com.ojajae.domain.store.constant.StoreFileType
 import com.ojajae.domain.store.entity.StoreFile
 import com.ojajae.domain.store.form.response.StoreImageAdminResponse
 import com.ojajae.domain.store.repository.StoreFileRepository
@@ -33,12 +34,23 @@ class StoreFileAdminService(
         storeFileRepository.deleteAllByStoreIdAndFileUrlIn(storeId = storeId, fileUrls = imageUrls)
     }
 
-    fun findImagesByStoreId(storeId: Int): List<StoreImageAdminResponse> {
-        return storeFileRepository.findImagesByStoreId(storeId).map {
+    fun findImagesByStoreId(storeId: Int, fileType: StoreFileType?): List<StoreImageAdminResponse> {
+        return storeFileRepository.findImagesByStoreId(storeId, fileType).map {
             StoreImageAdminResponse.of(
                 storeFile = it,
                 imageUrl = s3Service.getPresignedUrl(it.fileUrl),
             )
         }
+    }
+
+    fun findThumbnailImageByStoreId(storeId: Int): StoreImageAdminResponse? {
+        val thumbnailImage = storeFileRepository.findImagesByStoreId(storeId, StoreFileType.THUMBNAIL_IMAGE)
+        if (thumbnailImage.isNotEmpty()) {
+            return StoreImageAdminResponse.of(
+                storeFile = thumbnailImage[0],
+                imageUrl = s3Service.getS3Url(thumbnailImage[0].fileUrl),
+            )
+        }
+        return null
     }
 }

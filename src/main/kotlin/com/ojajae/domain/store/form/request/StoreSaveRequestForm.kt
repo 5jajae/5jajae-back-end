@@ -16,6 +16,7 @@ data class StoreSaveRequestForm(
     val items: String? = null,
     val isConstruction: Boolean? = null,
 
+    val thumbnailImageUrl: String? = null,
     val imageUrls: List<String>? = null,
     val itemTagIds: List<Int> = emptyList(),
 ) {

@@ -29,6 +29,19 @@ class FileUploadAdminController(
         ))
     }
 
+    @PostMapping("/storeThumbnail")
+    fun storeUploadThumbnailFile(
+        @ModelAttribute requestForm: FileUploadRequestForm,
+    ):ResponseEntity<ResultDTO<FileUploadResponseForm>> {
+        return ResponseEntity.ok(ResultDTO.createSuccess(
+            message = "",
+            data = s3UploadService.uploadFile(
+                prefix = "thumbnail",
+                requestForm = requestForm,
+            ),
+        ))
+    }
+
     @PostMapping("/item-tags")
     fun itemTageUploadFile(
         @ModelAttribute requestForm: FileUploadRequestForm,

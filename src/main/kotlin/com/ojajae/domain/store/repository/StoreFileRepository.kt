@@ -1,7 +1,9 @@
 package com.ojajae.domain.store.repository
 
+import com.ojajae.domain.store.constant.StoreFileType
 import com.ojajae.domain.store.entity.QStoreFile.storeFile
 import com.ojajae.domain.store.entity.StoreFile
+import com.querydsl.core.types.dsl.BooleanExpression
 import jakarta.persistence.LockModeType
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Lock
@@ -19,14 +21,15 @@ interface StoreFileRepository : JpaRepository<StoreFile, Int>, StoreFileCustomRe
 }
 
 interface StoreFileCustomRepository {
-    fun findImagesByStoreId(storeId: Int): List<StoreFile>
+    fun findImagesByStoreId(storeId: Int, fileType: StoreFileType?): List<StoreFile>
     fun findThumbnailImageByStoreIdIn(storeIds: List<Int>): List<StoreFile>
 }
 
-class StoreFileCustomImpl : StoreFileCustomRepository, QuerydslRepositorySupport(StoreFile::class.java) {
-    override fun findImagesByStoreId(storeId: Int): List<StoreFile> {
+class StoreFileRepositoryImpl : StoreFileCustomRepository, QuerydslRepositorySupport(StoreFile::class.java) {
+    override fun findImagesByStoreId(storeId: Int, fileType: StoreFileType?): List<StoreFile> {
         return from(storeFile).where(
             storeFile.storeId.eq(storeId),
+            eqFileType(fileType),
         ).fetch()
     }
 
@@ -37,7 +40,14 @@ class StoreFileCustomImpl : StoreFileCustomRepository, QuerydslRepositorySupport
 
         return from(storeFile).where(
             storeFile.storeId.`in`(storeIds),
-            storeFile.sort.eq(0),
+            storeFile.fileType.eq(StoreFileType.THUMBNAIL_IMAGE),
         ).fetch()
+    }
+
+    private fun eqFileType(fileType: StoreFileType?): BooleanExpression? {
+        if (fileType != null) {
+            return storeFile.fileType.eq(fileType)
+        }
+        return null
     }
 }
