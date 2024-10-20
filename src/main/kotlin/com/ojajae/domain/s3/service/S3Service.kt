@@ -11,6 +11,8 @@ import org.apache.commons.io.IOUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import java.awt.Transparency
+import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -68,7 +70,8 @@ class S3Service(
 
         try {
             Thumbnails.of(thumbnail)
-                .size(1024, 512)
+                .size(1200, 630)
+                .imageType(if(thumbnail.transparency == Transparency.OPAQUE) BufferedImage.TYPE_INT_RGB else BufferedImage.TYPE_INT_ARGB)
                 .toFile(tempFile)
 
             val request = PutObjectRequest(bucket, path, tempFile)

@@ -23,7 +23,19 @@ class StoreFileService(
     }
 
     @Transactional(readOnly = true)
-    fun findFirstImageByStoreIdIn(storeIds: List<Int>): List<StoreFileResponse> {
+    fun findThumbnailImageByStoreId(storeId: Int): StoreFileResponse? {
+        val list = storeFileRepository.findThumbnailImageByStoreIdIn(listOf(storeId))
+        if (list.isNotEmpty()) {
+            return StoreFileResponse.of(
+                storeFile = list[0],
+                imageUrl = s3Service.getS3Url(list[0].fileUrl),
+            )
+        }
+        return null;
+    }
+
+    @Transactional(readOnly = true)
+    fun findThumbnailImageByStoreIdIn(storeIds: List<Int>): List<StoreFileResponse> {
         return storeFileRepository.findThumbnailImageByStoreIdIn(storeIds).map {
             StoreFileResponse.of(
                 storeFile = it,

@@ -10,7 +10,6 @@ import com.ojajae.domain.store.entity.Store
 import com.ojajae.domain.store.exception.StoreException
 import com.ojajae.domain.store.form.request.StoreListRequestForm
 import com.ojajae.domain.store.form.request.StoreDetailRequestForm
-import com.ojajae.domain.store.form.request.StoreListSortType
 import com.ojajae.domain.store.form.response.StoreDetailResponseForm
 import com.ojajae.domain.store.form.response.StoreListResponse
 import com.ojajae.domain.store.form.response.StoreListResponseForm
@@ -32,7 +31,7 @@ class StoreService(
     ): StoreListResponseForm {
         val stores = storeRepository.getStoreList(request = request)
         val storeIds = stores.mapNotNull { it.store.id }
-        val storeFiles = storeFileService.findFirstImageByStoreIdIn(storeIds = storeIds).associateBy { it.storeId }
+        val storeFiles = storeFileService.findThumbnailImageByStoreIdIn(storeIds = storeIds).associateBy { it.storeId }
         val tags = itemTagStoreService.findByStoreIdIn(storeIds = storeIds).groupBy { it.storeId }
 
         return StoreListResponseForm(
@@ -52,6 +51,7 @@ class StoreService(
         val store: Store = storeRepository.getStore(StoreDetailRequestForm(storeId = storeId))
             ?: throw NotFoundException(StoreException.NotFoundStore)
         val storeFiles = storeFileService.findImagesByStoreId(store.id!!)
+        val thumbnailImage = storeFileService.findThumbnailImageByStoreId(store.id!!)
         val tags = itemTagStoreService.findByStoreId(store.id!!)
         val storeReadCount = dashboardRepository.count(
             DashboardSelectForm(
@@ -64,6 +64,7 @@ class StoreService(
             store = store,
             storeReadCount = storeReadCount,
             itemTags = tags,
+            thumbnailUrl = thumbnailImage?.imageUrl,
             imageUrls = storeFiles.map { it.imageUrl },
         )
     }

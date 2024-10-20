@@ -30,6 +30,8 @@ data class StoreDetailResponseForm(
 
     val storeReadCount: Long,
 
+    val thumbnailUrl: String?,
+
     val imageUrls: List<String>,
 
     val storeFiles: List<StoreFileResponse> = emptyList(),
@@ -40,6 +42,7 @@ data class StoreDetailResponseForm(
         fun of(
             store: Store,
             storeReadCount: Long,
+            thumbnailUrl: String?,
             imageUrls: List<String> = emptyList(),
             itemTags: List<ItemTagStoreResponseForm> = emptyList(),
         ): StoreDetailResponseForm {
@@ -58,6 +61,7 @@ data class StoreDetailResponseForm(
                 items = store.items,
                 storeReadCount = storeReadCount,
                 itemTags = itemTags,
+                thumbnailUrl = thumbnailUrl,
                 imageUrls = imageUrls,
             )
         }
