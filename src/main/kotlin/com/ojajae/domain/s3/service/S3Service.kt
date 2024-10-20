@@ -68,9 +68,13 @@ class S3Service(
         val tempFile = createTempFile(FilenameUtils.getName(path))
         val thumbnail = ImageIO.read(file.inputStream)
 
+        // 크기가 클 경우에만 썸네일로 크기 조정 (비율 유지)
+        val targetWidth = if (thumbnail.width > 1200) 1200 else thumbnail.width
+        val targetHeight = if (thumbnail.height > 630) 630 else thumbnail.height
+
         try {
             Thumbnails.of(thumbnail)
-                .size(1200, 630)
+                .size(targetWidth, targetHeight)
                 .imageType(if(thumbnail.transparency == Transparency.OPAQUE) BufferedImage.TYPE_INT_RGB else BufferedImage.TYPE_INT_ARGB)
                 .toFile(tempFile)
 
