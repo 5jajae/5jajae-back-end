@@ -5,8 +5,10 @@ import com.ojajae.common.controller.BaseAPIController
 import com.ojajae.common.utils.WebTool
 import com.ojajae.common.web.ResultDTO
 import com.ojajae.domain.dashbord.service.DashboardService
+import com.ojajae.domain.store.form.request.StoreFavoritesRequestForm
 import com.ojajae.domain.store.form.request.StoreListRequestForm
 import com.ojajae.domain.store.form.response.StoreDetailResponseForm
+import com.ojajae.domain.store.form.response.StoreFavoritesResponseForm
 import com.ojajae.domain.store.form.response.StoreListResponseForm
 import com.ojajae.domain.store.service.StoreService
 import jakarta.servlet.http.HttpServletRequest
@@ -43,6 +45,15 @@ class StoreAPIController(
         return ResponseEntity.ok(ResultDTO.createSuccess(
             message = "",
             data = storeService.getStore(storeId))
+        )
+    }
+
+
+    @PostMapping("/favorites")
+    fun getFavorites(@RequestBody storeFavoritesRequestForm: StoreFavoritesRequestForm): ResponseEntity<ResultDTO<StoreFavoritesResponseForm>> {
+        return ResponseEntity.ok(ResultDTO.createSuccess(
+            message = "",
+            data = storeService.getFavorites(storeFavoritesRequestForm))
         )
     }
 }
