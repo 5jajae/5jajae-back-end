@@ -3,12 +3,12 @@ package com.ojajae.domain.store.repository
 import com.ojajae.common.repository.LockableRepository
 import com.ojajae.common.utils.fetchPage
 import com.ojajae.domain.item_tag.entity.QItemTagStore.itemTagStore
+import com.ojajae.domain.store.constant.StoreListSortType
 import com.ojajae.domain.store.form.request.StorePageRequestForm
 import com.ojajae.domain.store.entity.QStore.store
 import com.ojajae.domain.store.entity.Store
-import com.ojajae.domain.store.form.request.StoreListRequestForm
 import com.ojajae.domain.store.form.request.StoreDetailRequestForm
-import com.ojajae.domain.store.form.request.StoreListSortType
+import com.ojajae.domain.store.repository.search.StoreSearch
 import com.ojajae.domain.store.vo.StoreAppListVO
 import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.BooleanExpression
@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 interface StoreRepository : JpaRepository<Store, Int>, StoreCustomRepository, LockableRepository<Store, Int>
 
 interface StoreCustomRepository {
-    fun getStoreList(request: StoreListRequestForm): List<StoreAppListVO>
+    fun getStoreList(request: StoreSearch): List<StoreAppListVO>
 
     fun getStore(form: StoreDetailRequestForm): Store?
 
@@ -29,7 +29,7 @@ interface StoreCustomRepository {
 }
 
 class StoreRepositoryImpl : QuerydslRepositorySupport(Store::class.java), StoreCustomRepository {
-    override fun getStoreList(request: StoreListRequestForm): List<StoreAppListVO> {
+    override fun getStoreList(request: StoreSearch): List<StoreAppListVO> {
         val distance = Expressions.numberTemplate(
             Double::class.java,
             "ST_Distance_Sphere(point({0}, {1}), point({2}, {3}))",

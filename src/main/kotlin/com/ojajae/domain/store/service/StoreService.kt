@@ -10,7 +10,9 @@ import com.ojajae.domain.store.entity.Store
 import com.ojajae.domain.store.exception.StoreException
 import com.ojajae.domain.store.form.request.StoreListRequestForm
 import com.ojajae.domain.store.form.request.StoreDetailRequestForm
+import com.ojajae.domain.store.form.request.StoreFavoritesRequestForm
 import com.ojajae.domain.store.form.response.StoreDetailResponseForm
+import com.ojajae.domain.store.form.response.StoreFavoritesResponseForm
 import com.ojajae.domain.store.form.response.StoreListResponse
 import com.ojajae.domain.store.form.response.StoreListResponseForm
 import com.ojajae.domain.store.repository.StoreRepository
@@ -29,7 +31,7 @@ class StoreService(
     fun getStoreList(
         request: StoreListRequestForm,
     ): StoreListResponseForm {
-        val stores = storeRepository.getStoreList(request = request)
+        val stores = storeRepository.getStoreList(request = request.toStoreSearch())
         val storeIds = stores.mapNotNull { it.store.id }
         val storeFiles = storeFileService.findThumbnailImageByStoreIdIn(storeIds = storeIds).associateBy { it.storeId }
         val tags = itemTagStoreService.findByStoreIdIn(storeIds = storeIds).groupBy { it.storeId }
@@ -66,6 +68,26 @@ class StoreService(
             itemTags = tags,
             thumbnailUrl = thumbnailImage?.imageUrl,
             imageUrls = storeFiles.map { it.imageUrl },
+        )
+    }
+
+
+    @Transactional(readOnly = true)
+    fun getFavorites(storeFavoritesRequestForm: StoreFavoritesRequestForm): StoreFavoritesResponseForm {
+        val stores = storeRepository.getStoreList(request = storeFavoritesRequestForm.toStoreSearch())
+        val storeIds = stores.mapNotNull { it.store.id }
+        val storeFiles = storeFileService.findThumbnailImageByStoreIdIn(storeIds = storeIds).associateBy { it.storeId }
+        val tags = itemTagStoreService.findByStoreIdIn(storeIds = storeIds).groupBy { it.storeId }
+
+        return StoreFavoritesResponseForm(
+            stores = stores.map {
+                StoreListResponse.of(
+                    store = it.store,
+                    thumbnailImage = storeFiles[it.store.id!!]?.imageUrl ?: DEFAULT_IMAGE_PATH,
+                    itemTags = tags[it.store.id!!] ?: emptyList(),
+                    distance = it.distance,
+                )
+            }
         )
     }
 }
