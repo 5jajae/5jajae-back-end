@@ -10,6 +10,7 @@ data class StoreListRequestForm(
     val lat: Double? = MyCoordinate.DEFAULT_LAT,
     val lng: Double? = MyCoordinate.DEFAULT_LNG,
     val sort: StoreListSortType = StoreListSortType.LATEST,
+    val distanceLimit: Double? = null,
 ) {
     fun toStoreSearch(): StoreSearch {
         return StoreSearch(
@@ -17,7 +18,8 @@ data class StoreListRequestForm(
             itemTagIds = itemTagIds,
             lat = lat,
             lng = lng,
-            sort = sort
+            sort = sort,
+            distanceLimit = distanceLimit
         )
     }
 }

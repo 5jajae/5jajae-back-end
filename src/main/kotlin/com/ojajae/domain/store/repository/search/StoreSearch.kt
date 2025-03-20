@@ -9,4 +9,5 @@ data class StoreSearch (
     val lat: Double? = null,
     val lng: Double? = null,
     val sort: StoreListSortType = StoreListSortType.LATEST,
+    val distanceLimit: Double? = null,
 )

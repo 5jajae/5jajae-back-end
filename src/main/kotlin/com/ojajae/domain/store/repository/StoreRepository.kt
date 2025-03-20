@@ -13,6 +13,7 @@ import com.ojajae.domain.store.vo.StoreAppListVO
 import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.Expressions
+import com.querydsl.core.types.dsl.NumberTemplate
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
@@ -40,6 +41,7 @@ class StoreRepositoryImpl : QuerydslRepositorySupport(Store::class.java), StoreC
             .where(
                 addressLike(request.address),
                 itemTagIdIn(request.itemTagIds),
+                distanceLimit(request.distanceLimit, distance),
             )
             .groupBy(store)
             .select(
@@ -98,6 +100,12 @@ class StoreRepositoryImpl : QuerydslRepositorySupport(Store::class.java), StoreC
     private fun eqStoreId(storeId: Int?): BooleanExpression? {
         return storeId?.let {
             store.id.eq(it)
+        }
+    }
+
+    private fun distanceLimit(distanceLimit: Double?,  distance: NumberTemplate<Double>): BooleanExpression? {
+        return distanceLimit?.let {
+            distance.loe(Expressions.constant(it))
         }
     }
 }

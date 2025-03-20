@@ -1,6 +1,9 @@
 ### 지도 메인 검색
 GET http://localhost:8080/v1/ojajae/stores?sort=DISTANCE&lat=37.5665&lng=126.978&itemTagIds=4
 
+### 지도 메인 검색
+GET http://localhost:8080/v1/ojajae/stores?sort=DISTANCE&lat=37.5665&lng=126.978&itemTagIds=4&distanceLimit=10000.0
+
 ### 즐겨찾기
 POST http://localhost:8080/v1/ojajae/stores/favorites
 Content-Type: application/json
